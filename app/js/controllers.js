@@ -1,11 +1,8 @@
 'use strict';
+angular.module('ThatOneFeed.controllers', [])
+    .controller('HomeCtrl', [function () {
 
-/* Controllers */
+    }])
+    .controller('ViewerCtrl', [function () {
 
-angular.module('myApp.controllers', []).
-  controller('MyCtrl1', [function() {
-
-  }])
-  .controller('MyCtrl2', [function() {
-
-  }]);
+    }]);
