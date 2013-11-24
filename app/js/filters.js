@@ -1,7 +1,7 @@
 'use strict';
 angular.module('ThatOneFeed.filters', [])
-    .filter('interpolate', ['version', function (version) {
+    .filter('urlEncode', [function (version) {
         return function (text) {
-            return String(text).replace(/\%VERSION\%/mg, version);
+            return encodeURIComponent(text);
         }
     }]);

@@ -1,0 +1,9 @@
+<div id="nav" ng-controller="NavCtrl">
+    <div ng-show="categories.length == 0">
+        Loading Categories...
+    </div>
+    <ul ng-show="categories.length > 0">
+        <li ng-repeat="c in categories" ng-click="open(c.id)" ng-class="activeClass(c.id)"><span class="count">({{c.unreadCount}})</span>{{c.label}}</li>
+    </ul>
+</div>
+<a href="##" class="feedly-link">Feedly</a>

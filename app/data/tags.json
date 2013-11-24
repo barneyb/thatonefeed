@@ -1,0 +1,14 @@
+[
+    {
+        "id": "user/4884d65e-26d9-4355-ac23-facde4fc5908/category/photos",
+        "label": "photos"
+    },
+    {
+        "id": "user/4884d65e-26d9-4355-ac23-facde4fc5908/category/etsy",
+        "label": "etsy"
+    },
+    {
+        "id": "user/4884d65e-26d9-4355-ac23-facde4fc5908/category/other",
+        "label": "other"
+    }
+]

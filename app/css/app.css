@@ -1,30 +1,174 @@
-/* app css stylesheet */
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+body {
+    margin: 0;
+    font-family: sans-serif;
 }
-
-.menu:before {
-  content: "[";
+a, a:link, a:visited {
+    text-decoration: none;
+    color: #666;
 }
-
-.menu:after {
-  content: "]";
+a:hover {
+    border-bottom: 1px solid black;
 }
-
-.menu > li {
-  display: inline;
+#nav {
+    position: fixed;
+    height: 100%;
+    margin-right: 20px;
+    padding-top: 10px;
+    background-color: #f0f0f4;
+    border-right: 1px solid #ccc;
+    width: 170px;
 }
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+#nav ul {
+    padding-left: 0;
+    list-style: none;
 }
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+#nav li {
+    padding: 4px 5px 4px 15px;
+    cursor: pointer;
+    /*white-space: nowrap;*/
+}
+#nav li:hover {
+    background-color: #def;
+}
+#nav li.active {
+    background-color: #bdf;
+}
+#nav li .count {
+    font-size: 70%;
+    color: #999;
+    display: inline-block;
+    float: right;
+}
+.feedly-link {
+    color: #999;
+    border: 1px solid #ccc;
+    padding: 3px 5px 3px 26px;
+    border-radius: 5px;
+    background-image: url(../images/feedly.png);
+    background-repeat: no-repeat;
+    background-size: 28px 28px;
+    background-position: 0 -3px;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+}
+.feedly-link:hover {
+    background-color: #6aba45;
+    color: #fff;
+    border-color: #666;
+}
+#content {
+    margin-left: 180px;
+    margin-right: 10px;
+}
+.item {
+    height: 100%;
+    text-align: center;
+}
+h2 {
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+h2 .origin {
+    font-size: 65%;
+    color: #999;
+    margin-left: 10px;
+}
+h2 .save {
+    background-image: url(../images/save.png);
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 0 5px;
+    display: inline-block;
+    vertical-align: bottom;
+    text-indent: 100px;
+    width: 26px;
+    padding-left: 0;
+    margin: 0;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.25;
+}
+h2 .save:hover {
+    opacity: 1;
+}
+h2 .save.saved {
+    opacity: 1;
+    background-image: url(../images/saved.png);
+}
+.raw-html {
+    max-width: 800px;
+    text-align: left;
+    margin: auto;
+}
+.raw-html * {
+    max-width: 800px;
+}
+.raw-html img {
+    margin: 5px 0;
+    background-color: #f9f9f9;
+}
+.raw-html img.show {
+    height: auto;
+}
+.raw-html img.hide {
+    display: none;
+}
+div.raw-html {
+    border-top : 1px solid #f0f0f0;
+    padding-top: 10px;
+    line-height: 1.3em;
+    padding-bottom: 30px;
+}
+div.image {
+    height: 100%;
+}
+.image.loading {
+    opacity: 0.5;
+}
+.image .caption {
+    position: fixed;
+    right: 5px;
+    bottom: 5px;
+    max-width: 400px;
+    text-align: left;
+    background-color: #444;
+    color: #eee;
+    font-size: 80%;
+    padding: 3px 10px;
+    border-radius: 10px;
+    opacity: 0.10;
+}
+.image .caption > p:first-child {
+    margin-top: 0;
+}
+.image .caption:hover {
+    opacity: 0.85;
+}
+.image .caption a,
+.image .caption a:link,
+.image .caption a:visited {
+    color: #fff;
+}
+.image .caption a:hover {
+    border-color: #fff;
+}
+.image .caption h1,
+.image .caption h2,
+.image .caption h3,
+.image .caption h4,
+.image .caption h5,
+.image .caption h6,
+.image .caption strong,
+.image .caption b {
+    font-weight: normal;
+}
+.image .caption em,
+.image .caption i {
+    font-style: normal;
+}
+.image .caption blockquote {
+    margin-left: 20px;
+    margin-right: 0;
 }
