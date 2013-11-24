@@ -2,24 +2,21 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        stylus: {
+        less: {
             compile: {
-                options: {
-                    compress: true
-                },
                 files: {
-                    'app/css/_app.css': 'app/styles/*.styl'
+                    'app/css/_app_less.css': 'app/styles/*.less'
                 }
             }
         },
         coffee: {
             compile: {
                 files: {
-                    'app/js/_app.js': 'app/scripts/*.coffee'
+                    'app/js/_app_coffee.js': 'app/scripts/*.coffee'
                 }
             }
         },
-        // todo: uglify (already in scope) after concat...
+        // todo: uglify (already in scope) instead of concat?
         concat: {
             vendor_js: {
                 src: [
@@ -35,7 +32,7 @@ module.exports = function (grunt) {
                 ],
                 dest: 'public/js/app.js'
             },
-            css: {
+            app_css: {
                 src: [
                     'app/css/*.css'
                 ],
@@ -56,11 +53,11 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            stylus: {
+            less: {
                 files: [
-                    'app/styles/*.styl'
+                    'app/styles/*.less'
                 ],
-                tasks: ['stylus']
+                tasks: ['less']
             },
             coffee: {
                 files: [
@@ -84,7 +81,7 @@ module.exports = function (grunt) {
                 files: [
                     'app/css/*.css'
                 ],
-                tasks: ['concat:css']
+                tasks: ['concat:app_css']
             },
             static: {
                 files: [
@@ -92,17 +89,23 @@ module.exports = function (grunt) {
                 ],
                 tasks: ['copy']
             }
-        }
+        },
+        clean: [
+            "public",
+            "app/css/_*",
+            "app/js/_*"
+        ]
     });
 
     // Load the plugin
-    grunt.loadNpmTasks('grunt-contrib-stylus');
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-coffee');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask('default', ['concat', 'copy', 'watch']);
+    grunt.registerTask('default', ['clean', 'coffee', 'less', 'concat', 'copy', 'watch']);
 
 };
