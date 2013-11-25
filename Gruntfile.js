@@ -105,8 +105,7 @@ module.exports = function (grunt) {
                 options: {
                     module: 'ThatOneFeed',
                     htmlmin:  {
-                        removeComments: true,
-                        collapseWhitespace: true
+                        removeComments: true
                     }
                 },
                 cwd: 'app',
