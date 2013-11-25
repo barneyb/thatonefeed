@@ -52,11 +52,9 @@ angular.module("ThatOneFeed.services", []).factory("categories", ["$http", "$q",
     altRE = /\salt="([^"]+)"/
     titleRE = /\stitle="([^"]+)"/
     rip = (block) ->
-        return block    unless ripperRE.test(block) # no images
+        return block unless ripperRE.test(block) # has images
         text = block.replace(/<\/?[a-z][^>]*>/g, "").replace(/\s+/g, " ")
-
-        # treat it as textual content
-        return block    if text.length > 1000
+        return block if text.length > 1000 # treat as textual
         imgs = []
         caption = ""
         loop
@@ -84,6 +82,7 @@ angular.module("ThatOneFeed.services", []).factory("categories", ["$http", "$q",
 
     core = (it, d) ->
         d.id = it.id
+        d.age = moment(it.published).fromNow(true)
         d.origin = it.origin.title
         d.title = it.title
         d.link = (it.canonical or it.alternate)[0].href
@@ -119,12 +118,10 @@ angular.module("ThatOneFeed.services", []).factory("categories", ["$http", "$q",
                 )
 
             if typeof r is "string"
-
                 # synchronous
                 asText r # we trust what feedly gave us
                 deferred.resolve()
             else
-
                 # list of images - asynchronous
                 accepted = []
                 rejectCount = 0
