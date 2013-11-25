@@ -104,7 +104,7 @@ module.exports = function (grunt) {
             compile: {
                 options: {
                     module: 'ThatOneFeed',
-                    htmlmin:  {
+                    htmlmin: {
                         removeComments: true
                     }
                 },
