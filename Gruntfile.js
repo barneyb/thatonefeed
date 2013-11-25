@@ -23,6 +23,7 @@ module.exports = function (grunt) {
         concat: {
             vendor_js: {
                 src: [
+                    'app/lib/moment.js',
                     'app/lib/jquery/jquery.js',
                     'app/lib/angular/angular.js',
                     'app/lib/angular/angular-route.js'
@@ -70,7 +71,7 @@ module.exports = function (grunt) {
             },
             vendor_js: {
                 files: [
-                    'app/lib/*/*.js'
+                    'app/lib/**/*.js'
                 ],
                 tasks: ['concat:vendor_js']
             },
@@ -79,6 +80,12 @@ module.exports = function (grunt) {
                     'app/js/*.js'
                 ],
                 tasks: ['concat:app_js']
+            },
+            templates_js: {
+                files: [
+                    'app/partials/*.html'
+                ],
+                tasks: ['ngtemplates']
             },
             app_css: {
                 files: [
