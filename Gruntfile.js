@@ -11,6 +11,9 @@ module.exports = function (grunt) {
         },
         coffee: {
             compile: {
+                options: {
+                    join: true
+                },
                 files: {
                     'app/js/_app_coffee.js': 'app/scripts/*.coffee'
                 }
