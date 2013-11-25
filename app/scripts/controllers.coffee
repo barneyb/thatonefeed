@@ -22,10 +22,9 @@ angular.module("ThatOneFeed.controllers", [])
     index = -1
     continuation = `undefined`
     sync = ->
-        
 #        clearTimeout(viewFlushTimeout)
         it = $scope.item = (if index >= 0 and index < $scope.items.length then $scope.items[index] else null)
-        
+
         # todo: record read status
 #        if (it && it.id)
 #            found = false
@@ -102,7 +101,6 @@ angular.module("ThatOneFeed.controllers", [])
 
     $scope.$on "key", (e, ke) ->
         
-        #noinspection CoffeeScriptSwitchStatementWithNoDefaultBranch
         switch ke.keyCode
             when 32 # SPACE
                 $scope[(if ke.shiftKey then "previous" else "next")]()
@@ -128,7 +126,7 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.next()    if index < 0 and $scope.items.length > 0
 
     $scope.$watch "item", ->
-        $scope.templateUrl = (if $scope.item then "partials/_entry_" + $scope.item.type + ".html" else null)
+        $scope.templateUrl = "partials/_entry_" + (if $scope.item then $scope.item.type else if index > 0 then 'done' else 'loading') + ".html"
 
     $scope.$on "$destroy", ->
         $scope.streamId = null
