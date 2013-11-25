@@ -14,7 +14,6 @@ angular.module("ThatOneFeed", [
     $routeProvider.when "/decline", # when the oauth loop fails for whatever reason - the server sends people here
         templateUrl: "partials/decline.html"
 
-        ##
     $routeProvider.when "/view",
         templateUrl: "partials/viewer.html"
 
