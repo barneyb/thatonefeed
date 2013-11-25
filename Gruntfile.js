@@ -93,6 +93,20 @@ module.exports = function (grunt) {
                 tasks: ['copy']
             }
         },
+        ngtemplates: {
+            compile: {
+                options: {
+                    module: 'ThatOneFeed',
+                    htmlmin:  {
+                        removeComments: true,
+                        collapseWhitespace: true
+                    }
+                },
+                cwd: 'app',
+                src: 'partials/*.html',
+                dest: 'app/js/_templates.js'
+            }
+        },
         clean: [
             "public",
             "app/css/_*",
@@ -108,7 +122,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-angular-templates');
 
-    grunt.registerTask('default', ['clean', 'coffee', 'less', 'concat', 'copy', 'watch']);
+    grunt.registerTask('default', ['clean', 'coffee', 'less', 'ngtemplates', 'concat', 'copy', 'watch']);
 
 };
