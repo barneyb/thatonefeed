@@ -4,6 +4,6 @@ angular.module("ThatOneFeed.directives", [])
         templateUrl: "partials/_menu.html"
     ])
 .directive("itemTitle", [ ->
-        restrict: "E"
+        restrict: "A"
         templateUrl: "partials/_entry_title.html"
     ])
