@@ -1,7 +1,7 @@
 angular.module("ThatOneFeed.directives", [])
 .directive("tofMenu", [ ->
-        restrict: "E"
-        templateUrl: "partials/_menu.html"
+        restrict: "A"
+        templateUrl: "partials/_sidebar.html"
     ])
 .directive("itemTitle", [ ->
         restrict: "A"
