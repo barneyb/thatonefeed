@@ -137,11 +137,13 @@ div.raw-html {
     line-height: 1.3em;
     padding-bottom: 30px;
 }
-.image.loading {
-    opacity: 0.5;
+div.image {
+    height: 100%;
 }
 .image {
-    height: 100%;
+    &.loading {
+        opacity: 0.5;
+    }
 
     .caption {
         position: fixed;
