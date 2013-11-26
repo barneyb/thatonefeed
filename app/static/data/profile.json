@@ -1,0 +1,15 @@
+{
+    "apiRoot": "http://sandbox.feedly.com",
+    "id": "48e4fc5e-26d9-4355-ac23-facd84d65908",
+    "client": "sandbox272",
+    "wave": "2013.41",
+    "email": "bboisvert@gmail.com",
+    "familyName": "Boisvert",
+    "givenName": "Barney",
+    "google": "107847152674142695410",
+    "created": 1381592559804,
+    "wordPressConnected": false,
+    "evernoteConnected": false,
+    "pocketConnected": false,
+    "locale": "en"
+}

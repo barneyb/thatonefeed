@@ -1,6 +1,13 @@
 angular.module("ThatOneFeed.controllers", [])
-.controller("SplashCtrl", [ () ->
-        x
+.controller("SplashCtrl", ["$location", "profile", ($location, profile) ->
+        profile.get().then (d) ->
+            $location.path "/view"
+        , () ->
+            console.log("failed to get profile - must need to log in")
+    ])
+.controller("LogoutCtrl", ["$location", "profile", ($location, profile) ->
+        profile.logout().then ->
+            $location.url "/"
     ])
 .controller("KeyCtrl", ["$scope", ($scope) ->
         $scope.key = (e) ->
@@ -36,11 +43,11 @@ angular.module("ThatOneFeed.controllers", [])
                     if data.id is $scope.streamId and (continuation is `undefined` or continuation isnt data.continuation)
                         continuation = (if data.continuation then data.continuation else null)
                         data.items.forEach (it) ->
-                            ripper(it).then ((item) ->
+                            ripper(it).then (item) ->
                                 $scope.items.push item    if item
-                            ), ((err) ->
+                            , (err) ->
                                 console.log "error ripping entry", err
-                            ), (item) ->
+                            , (item) ->
                                 $scope.items.push item
                 ), (data) ->
                     console.log "error loading entries", data

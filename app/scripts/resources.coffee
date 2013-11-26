@@ -11,6 +11,16 @@ angular.module("ThatOneFeed.resources", [])
             )
             d.promise
     ])
+.factory("profile", ["$http", "wrapHttp", "syncPromise", ($http, wrapHttp, sync) ->
+        profile = null
+        get: () ->
+            return sync(profile) if profile?
+            wrapHttp($http.get("data/profile.json")).then (d) ->
+                profile = d
+        logout: () ->
+            wrapHttp($http.delete("data/profile.json")).then ->
+                profile = null
+    ])
 .factory("categories", ["$http", "$q", ($http, $q) ->
         cats = null
         (forceRefresh) ->

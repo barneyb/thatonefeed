@@ -7,22 +7,26 @@ angular.module("ThatOneFeed", [
         "ThatOneFeed.directives",
         "ThatOneFeed.controllers"
     ])
-.config(["$routeProvider", ($routeProvider) ->
-        $routeProvider.when "/",
+.config(["$routeProvider", ($router) ->
+        $router.when "/",
             templateUrl: "partials/splash.html"
             controller: "SplashCtrl"
 
-        $routeProvider.when "/decline", # when the oauth loop fails for whatever reason - the server sends people here
+        $router.when "/logout",
+            templateUrl: "partials/splash.html"
+            controller: "LogoutCtrl"
+
+        $router.when "/decline", # when the oauth loop fails for whatever reason - the server sends people here
             templateUrl: "partials/decline.html"
 
-        $routeProvider.when "/view",
+        $router.when "/view",
             templateUrl: "partials/stream.html"
             controller: "ViewerCtrl"
 
-        $routeProvider.when "/view/:streamId",
+        $router.when "/view/:streamId",
             templateUrl: "partials/stream.html"
             controller: "StreamCtrl"
 
-        $routeProvider.otherwise
+        $router.otherwise
             redirectTo: "/"
     ])

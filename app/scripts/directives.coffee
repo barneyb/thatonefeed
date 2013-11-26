@@ -1,7 +1,14 @@
 angular.module("ThatOneFeed.directives", [])
 .directive("tofMenu", [ ->
         restrict: "A"
-        templateUrl: "partials/_sidebar.html"
+        templateUrl: "partials/_sidebar.html",
+        controller: ["$scope", "profile", ($scope, profile) ->
+            $scope.name = null
+            $scope.feedlyUrl = null
+            profile.get().then (p) ->
+                $scope.name = p.givenName
+                $scope.feedlyUrl = p.apiRoot
+        ]
     ])
 .directive("itemTitle", [ ->
         restrict: "A"
