@@ -11,6 +11,17 @@ angular.module("ThatOneFeed.resources", [])
             )
             d.promise
     ])
+.factory("syncPromise", ["$q", "$timeout", ($q, $timeout) ->
+        (resolution) ->
+            d = $q.defer()
+            $timeout ->
+                d.resolve resolution
+            d.promise
+    ])
+.factory("syncFail", ["$q", "syncPromise", ($q, sync) ->
+        (resolution) ->
+            sync($q.reject(resolution))
+    ])
 .factory("categories", ["$http", "$q", ($http, $q) ->
         cats = null
         (forceRefresh) ->
@@ -49,36 +60,47 @@ angular.module("ThatOneFeed.resources", [])
             # don't want $http's promise directly, we want a protocol-less promise
             wrapHttp($http.get("data/entries.json?streamId=" + encodeURIComponent(streamId) + "&continuation=" + encodeURIComponent(continuation || '')))
     ])
-.factory("markers", ["$http", "wrapHttp", ($http, wrap) ->
+.factory("markers", ["$http", "wrapHttp", "syncPromise", "syncFail", ($http, wrap, sync, syncFail) ->
         tags = []
         globalSavedTagId = null
+        lastReadId = null
 
         ( ->
-            $http.get("data/tags.json").success((data) ->
+            $http.get("data/tags.json")
+            .success((data) ->
                 tags = data.sort((a, b) ->
                     (if a.label < b.label then -1 else 1)
                 )
                 tags.forEach (it) ->
                     globalSavedTagId = it.id if it.id.split("/").pop() is "global.saved"
-            ).error( ->
+            )
+            .error( ->
                 console.log "error retrieving tags"
             )
         )()
 
         save: (id) ->
-            console.log "no 'saved' tag is known"  unless globalSavedTagId?
+            syncFail(null) unless globalSavedTagId?
             wrap($http.put("data/tag.json",
                 tagId: globalSavedTagId
                 entryId: id
             ))
         unsave: (id) ->
-            console.log "no 'saved' tag is known"  unless globalSavedTagId?
+            syncFail(null) unless globalSavedTagId?
             wrap($http.delete("data/untag.json",
                 tagId: globalSavedTagId
                 entryId: id
             ))
         read: (id) ->
-            wrap($http.post("data/read.json",
-                id: id
-            ))
+            console.log "read", id
+            if (id == lastReadId)
+                # already did it
+                sync(null)
+            else
+                wrap($http.post("data/read.json",
+                    id: id
+                )).then( ->
+                    console.log "marked read", id
+                    lastReadId = id
+                )
     ])
