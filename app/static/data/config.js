@@ -1,0 +1,3 @@
+window.ThatOneFeed = {
+    dataExtension: "json"
+};

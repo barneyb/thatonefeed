@@ -18,6 +18,7 @@ angular.module("ThatOneFeed", [
 
         $router.when "/decline", # when the oauth loop fails for whatever reason - the server sends people here
             templateUrl: "partials/decline.html"
+            controller: "SplashCtrl"
 
         $router.when "/view",
             templateUrl: "partials/stream.html"

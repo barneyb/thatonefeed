@@ -11,17 +11,31 @@ angular.module("ThatOneFeed.resources", [])
             )
             d.promise
     ])
-.factory("profile", ["$http", "wrapHttp", "syncPromise", ($http, wrapHttp, sync) ->
+.factory("config", ["$window", ($window) ->
+        config = $window.ThatOneFeed
+        () ->
+            config
+    ])
+.factory("dataUrl", ["config", (config) ->
+        c = config()
+        (base, params) ->
+            s = "data/#{base}.#{c.dataExtension}"
+            if params?
+                s += "?" + for n, v of params
+                    n + "=" + encodeURIComponent(v || '')
+            s
+    ])
+.factory("profile", ["$http", "wrapHttp", "syncPromise", "dataUrl", ($http, wrapHttp, sync, dataUrl) ->
         profile = null
         get: () ->
             return sync(profile) if profile?
-            wrapHttp($http.get("data/profile.json")).then (d) ->
+            wrapHttp($http.get(dataUrl("profile"))).then (d) ->
                 profile = d
         logout: () ->
-            wrapHttp($http.delete("data/profile.json")).then ->
+            wrapHttp($http.delete(dataUrl("profile"))).then ->
                 profile = null
     ])
-.factory("categories", ["$http", "$q", ($http, $q) ->
+.factory("categories", ["$http", "$q", "dataUrl", ($http, $q, dataUrl) ->
         cats = null
         (forceRefresh) ->
             deferred = $q.defer()
@@ -37,35 +51,37 @@ angular.module("ThatOneFeed.resources", [])
                     cats.forEach (it) ->
                         it.unreadCount = urc.count    if it.id is urc.id
 
-
                 deferred.resolve cats
 
             cats = null    if forceRefresh
             unless cats?
-                $http.get("data/categories.json")
+                $http.get(dataUrl("categories"))
                 .success (data) ->
                     cats = data
                     process()
 
-            $http.get("data/counts.json")
+            $http.get(dataUrl("counts"))
             .success (data) ->
                 counts = data
                 process()
 
             deferred.promise
     ])
-.factory("entries", ["$http", "wrapHttp", ($http, wrapHttp) ->
+.factory("entries", ["$http", "wrapHttp", "dataUrl", ($http, wrapHttp, dataUrl) ->
         (streamId, continuation) ->
             # don't want $http's promise directly, we want a protocol-less promise
-            wrapHttp($http.get("data/entries.json?streamId=" + encodeURIComponent(streamId) + "&continuation=" + encodeURIComponent(continuation || '')))
+            wrapHttp($http.get(dataUrl("entries",
+                streamId: streamId
+                continuation: continuation
+            )))
     ])
-.factory("markers", ["$http", "wrapHttp", "syncPromise", "syncFail", ($http, wrap, sync, syncFail) ->
+.factory("markers", ["$http", "wrapHttp", "syncPromise", "syncFail", "dataUrl", ($http, wrap, sync, syncFail, dataUrl) ->
         tags = []
         globalSavedTagId = null
         lastReadId = null
 
         ( ->
-            $http.get("data/tags.json")
+            $http.get(dataUrl("tags"))
             .success((data) ->
                 tags = data.sort((a, b) ->
                     (if a.label < b.label then -1 else 1)
@@ -80,19 +96,19 @@ angular.module("ThatOneFeed.resources", [])
 
         save: (id) ->
             return syncFail(null) unless globalSavedTagId?
-            wrap($http.put("data/tag.json",
+            wrap($http.put(dataUrl("tag"),
                 tagId: globalSavedTagId
                 entryId: id
             ))
         unsave: (id) ->
             return syncFail(null) unless globalSavedTagId?
-            wrap($http.delete("data/untag.json",
+            wrap($http.delete(dataUrl("untag"),
                 tagId: globalSavedTagId
                 entryId: id
             ))
         read: (id) ->
             return sync(null) if id == lastReadId
-            wrap($http.post("data/read.json",
+            wrap($http.post(dataUrl("read"),
                 id: id
             )).then( ->
                 lastReadId = id
