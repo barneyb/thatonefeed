@@ -20,11 +20,13 @@ angular.module("ThatOneFeed.resources", [])
 
             cats = null    if forceRefresh
             unless cats?
-                $http.get("data/categories.json").success (data) ->
+                $http.get("data/categories.json")
+                .success (data) ->
                     cats = data
                     process()
 
-            $http.get("data/counts.json").success (data) ->
+            $http.get("data/counts.json")
+            .success (data) ->
                 counts = data
                 process()
 
@@ -34,7 +36,8 @@ angular.module("ThatOneFeed.resources", [])
         (streamId, continuation) ->
             # don't want $http's promise directly, we want a protocol-less promise
             deferred = $q.defer()
-            $http.get("data/entries.json").success (data) ->
+            $http.get("data/entries.json?streamId=" + encodeURIComponent(streamId) + "&continuation=" + encodeURIComponent(continuation || ''))
+            .success (data) ->
                 deferred.resolve data
 
             deferred.promise
