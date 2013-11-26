@@ -1,4 +1,15 @@
 angular.module("ThatOneFeed.services", [])
+.factory("syncPromise", ["$q", "$timeout", ($q, $timeout) ->
+        (resolution) ->
+            d = $q.defer()
+            $timeout ->
+                d.resolve resolution
+            d.promise
+    ])
+.factory("syncFail", ["$q", "syncPromise", ($q, sync) ->
+        (resolution) ->
+            sync($q.reject(resolution))
+    ])
 .factory("promiseImage", ["$q", ($q) ->
         (src) ->
             deferred = $q.defer()

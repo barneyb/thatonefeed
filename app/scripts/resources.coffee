@@ -11,17 +11,6 @@ angular.module("ThatOneFeed.resources", [])
             )
             d.promise
     ])
-.factory("syncPromise", ["$q", "$timeout", ($q, $timeout) ->
-        (resolution) ->
-            d = $q.defer()
-            $timeout ->
-                d.resolve resolution
-            d.promise
-    ])
-.factory("syncFail", ["$q", "syncPromise", ($q, sync) ->
-        (resolution) ->
-            sync($q.reject(resolution))
-    ])
 .factory("categories", ["$http", "$q", ($http, $q) ->
         cats = null
         (forceRefresh) ->
