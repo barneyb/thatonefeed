@@ -73,11 +73,10 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.next = ->
             if $scope.hasNext()
                 index += 1
-                $scope.$emit "_itemRead"
-
-                # todo: scaling
-                #$scope.$broadcast('unscale');
-                #$scope.zoom = true;
+                # todo: read tracking
+#                $scope.$emit "_itemRead"
+                $scope.$broadcast('unscale');
+                $scope.zoom = true;
                 sync()
 
         $scope.skipRest = ->
@@ -94,10 +93,8 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.previous = ->
             if $scope.hasPrevious()
                 index -= 1
-
-                # todo: scaling
-                #$scope.$broadcast('unscale');
-                #$scope.zoom = true;
+                $scope.$broadcast('unscale');
+                $scope.zoom = true;
                 sync()
 
         $scope.$on "key", (e, ke) ->
@@ -118,13 +115,12 @@ angular.module("ThatOneFeed.controllers", [])
 #                    $scope.toggleSaved();
                 when 68, 100 # D, d
                     $scope.skipRest()
-                # todo: scaling
-#                when 65, 97, 90, 122 # A, a, Z, z
-#                    $scope.zoom = ! $scope.zoom;
-#                    $scope.$broadcast('rescale');
+                when 65, 97, 90, 122 # A, a, Z, z
+                    $scope.zoom = ! $scope.zoom;
+                    $scope.$broadcast('rescale');
 
         $scope.$watchCollection "items", ->
-            $scope.next()    if index < 0 and $scope.items.length > 0
+            $scope.next() if index < 0 and $scope.items.length > 0
 
         $scope.$watch "item", ->
             $scope.templateUrl = "partials/_entry_" + (if $scope.item then $scope.item.type else if index > 0 then 'done' else 'loading') + ".html"
