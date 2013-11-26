@@ -1,4 +1,16 @@
 angular.module("ThatOneFeed.resources", [])
+.factory("wrapHttp", ["$q", ($q) ->
+        (hp) ->
+            d = $q.defer()
+            hp
+            .success( (data) ->
+                d.resolve data
+            )
+            .error( (err) ->
+                d.reject err
+            )
+            d.promise
+    ])
 .factory("categories", ["$http", "$q", ($http, $q) ->
         cats = null
         (forceRefresh) ->
@@ -32,30 +44,14 @@ angular.module("ThatOneFeed.resources", [])
 
             deferred.promise
     ])
-.factory("entries", ["$http", "$q", ($http, $q) ->
+.factory("entries", ["$http", "wrapHttp", ($http, wrapHttp) ->
         (streamId, continuation) ->
             # don't want $http's promise directly, we want a protocol-less promise
-            deferred = $q.defer()
-            $http.get("data/entries.json?streamId=" + encodeURIComponent(streamId) + "&continuation=" + encodeURIComponent(continuation || ''))
-            .success (data) ->
-                deferred.resolve data
-
-            deferred.promise
+            wrapHttp($http.get("data/entries.json?streamId=" + encodeURIComponent(streamId) + "&continuation=" + encodeURIComponent(continuation || '')))
     ])
-.factory("markers", ["$http", "$q", ($http, $q) ->
+.factory("markers", ["$http", "wrapHttp", ($http, wrap) ->
         tags = []
         globalSavedTagId = null
-        readQueue = []
-        wrap = (hp) ->
-            d = $q.defer()
-            hp
-            .success( (data) ->
-                d.resolve(data)
-            )
-            .error( (err) ->
-                d.reject(err)
-            )
-            d.promise
 
         ( ->
             $http.get("data/tags.json").success((data) ->
