@@ -7,7 +7,7 @@ angular.module("ThatOneFeed.directives", [])
         restrict: "A"
         templateUrl: "partials/_entry_title.html"
     ])
-.directive("autoScale", [ ->
+.directive("maximizeImage", [ ->
         restrict: "A"
         controller: ['$scope', '$element', '$window', ($scope, $element, $window) ->
             rescale = ->
@@ -33,5 +33,34 @@ angular.module("ThatOneFeed.directives", [])
                 $element.addClass("loading").width("auto").height("auto")
 
             $scope.$on "rescale", rescale
+        ]
+    ])
+.directive("scaledImageContainer", [ ->
+        restrict: "A",
+        controller: ['$timeout', '$element', ($timeout, $element) ->
+            rescale = ->
+                nw = @naturalWidth
+                nh = @naturalHeight
+
+                # iframe gives undefined, so use === against null
+                return if nw is null or nw is 0 or nh is null or nh is 0
+
+                e = angular.element(this)
+                if nw < 200 or nh < 100
+                    e.addClass "hide"
+                    return
+
+                w = e.width()
+                h = e.height()
+                pw = $element.width() # .raw-html's width
+                ph = $element.parents("#content").height() * 0.75 # 75% #content's height
+                factor = Math.min(3, Math.min(pw / w, ph / h))
+                e.addClass("show").width(Math.floor(w * factor) + "px").height(Math.floor(h * factor) + "px")
+
+            $timeout ->
+                es = $element.find("img, iframe")
+                es.bind "load", rescale
+                for e in es
+                    rescale.call(e)
         ]
     ])

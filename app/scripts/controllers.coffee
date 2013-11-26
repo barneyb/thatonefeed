@@ -19,7 +19,7 @@ angular.module("ThatOneFeed.controllers", [])
         ), (data) ->
             console.log "error loading categories", data
     ])
-.controller("StreamCtrl", ["$routeParams", "$scope", "entries", "entryRipper", ($routeParams, $scope, entries, ripper) ->
+.controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", ($routeParams, $window, $scope, entries, ripper) ->
         index = -1
         continuation = `undefined`
         sync = ->
@@ -123,6 +123,7 @@ angular.module("ThatOneFeed.controllers", [])
             $scope.next() if index < 0 and $scope.items.length > 0
 
         $scope.$watch "item", ->
+            $window.scrollTo 0, 0
             $scope.templateUrl = "partials/_entry_" + (if $scope.item then $scope.item.type else if index > 0 then 'done' else 'loading') + ".html"
 
         $scope.$on "$destroy", ->
