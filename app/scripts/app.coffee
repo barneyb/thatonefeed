@@ -16,7 +16,8 @@ angular.module("ThatOneFeed", [
             templateUrl: "partials/decline.html"
 
         $routeProvider.when "/view",
-            templateUrl: "partials/viewer.html"
+            templateUrl: "partials/stream.html"
+            controller: "ViewerCtrl"
 
         $routeProvider.when "/view/:streamId",
             templateUrl: "partials/stream.html"

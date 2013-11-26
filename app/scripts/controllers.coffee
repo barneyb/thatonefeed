@@ -19,6 +19,9 @@ angular.module("ThatOneFeed.controllers", [])
         ), (data) ->
             console.log "error loading categories", data
     ])
+.controller("ViewerCtrl", ["$scope", ($scope) ->
+        $scope.templateUrl = "partials/_entry_select_category.html"
+    ])
 .controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", ($routeParams, $window, $scope, entries, ripper) ->
         index = -1
         continuation = `undefined`
