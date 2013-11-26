@@ -45,6 +45,18 @@ angular.module("ThatOneFeed.resources", [])
 .factory("markers", ["$http", "$q", ($http, $q) ->
         tags = []
         globalSavedTagId = null
+        readQueue = []
+        wrap = (hp) ->
+            d = $q.defer()
+            hp
+            .success( (data) ->
+                d.resolve(data)
+            )
+            .error( (err) ->
+                d.reject(err)
+            )
+            d.promise
+
         ( ->
             $http.get("data/tags.json").success((data) ->
                 tags = data.sort((a, b) ->
@@ -59,24 +71,18 @@ angular.module("ThatOneFeed.resources", [])
 
         save: (id) ->
             console.log "no 'saved' tag is known"  unless globalSavedTagId?
-            $http.put("data/tag.json",
+            wrap($http.put("data/tag.json",
                 tagId: globalSavedTagId
                 entryId: id
-            ).error(->
-                alert "error saving item"
-            )
+            ))
         unsave: (id) ->
             console.log "no 'saved' tag is known"  unless globalSavedTagId?
-            $http.delete("data/untag.json",
+            wrap($http.delete("data/untag.json",
                 tagId: globalSavedTagId
                 entryId: id
-            ).error(->
-                alert "error unsaving item"
-            )
+            ))
         read: (id) ->
-            $http.post("data/read.json",
+            wrap($http.post("data/read.json",
                 id: id
-            ).error(->
-                console.log "error marking item read"
-            )
+            ))
     ])
