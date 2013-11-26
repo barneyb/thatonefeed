@@ -77,14 +77,16 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.toggleSaved = ->
             if $scope.item
-                $scope.item.saved = ! $scope.item.saved
                 if $scope.item.saved
-                    markers.save($scope.item.id)
-                else
                     markers.unsave($scope.item.id)
+                        .then ->
+                            $scope.item.saved = false
+                else
+                    markers.save($scope.item.id)
+                        .then ->
+                            $scope.item.saved = true
 
         $scope.$on "key", (e, ke) ->
-
             switch ke.keyCode
                 when 32 # SPACE
                     $scope[(if ke.shiftKey then "previous" else "next")]()
@@ -112,8 +114,9 @@ angular.module("ThatOneFeed.controllers", [])
             $scope.zoom = true;
             $scope.templateUrl = "partials/_entry_" + (if $scope.item then $scope.item.type else if index > 0 then 'done' else 'loading') + ".html"
             if $scope.item && $scope.item.unread
-                $scope.item.unread = false
                 markers.read($scope.item.id)
+                    .then ->
+                        $scope.item.unread = false
 
         $scope.$on "$destroy", ->
             $scope.streamId = null

@@ -80,27 +80,22 @@ angular.module("ThatOneFeed.resources", [])
         )()
 
         save: (id) ->
-            syncFail(null) unless globalSavedTagId?
+            return syncFail(null) unless globalSavedTagId?
             wrap($http.put("data/tag.json",
                 tagId: globalSavedTagId
                 entryId: id
             ))
         unsave: (id) ->
-            syncFail(null) unless globalSavedTagId?
+            return syncFail(null) unless globalSavedTagId?
             wrap($http.delete("data/untag.json",
                 tagId: globalSavedTagId
                 entryId: id
             ))
         read: (id) ->
-            console.log "read", id
-            if (id == lastReadId)
-                # already did it
-                sync(null)
-            else
-                wrap($http.post("data/read.json",
-                    id: id
-                )).then( ->
-                    console.log "marked read", id
-                    lastReadId = id
-                )
+            return sync(null) if id == lastReadId
+            wrap($http.post("data/read.json",
+                id: id
+            )).then( ->
+                lastReadId = id
+            )
     ])
