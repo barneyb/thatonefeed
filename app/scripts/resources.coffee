@@ -5,7 +5,7 @@ angular.module("ThatOneFeed.resources", [])
             deferred = $q.defer()
             counts = null
             process = ->
-                return    if not cats? or not counts?
+                return if not cats? or not counts?
                 # reset
                 cats.forEach (it) ->
                     it.unreadCount = 0
@@ -41,4 +41,42 @@ angular.module("ThatOneFeed.resources", [])
                 deferred.resolve data
 
             deferred.promise
+    ])
+.factory("markers", ["$http", "$q", ($http, $q) ->
+        tags = []
+        globalSavedTagId = null
+        ( ->
+            $http.get("data/tags.json").success((data) ->
+                tags = data.sort((a, b) ->
+                    (if a.label < b.label then -1 else 1)
+                )
+                tags.forEach (it) ->
+                    globalSavedTagId = it.id if it.id.split("/").pop() is "global.saved"
+            ).error( ->
+                console.log "error retrieving tags"
+            )
+        )()
+
+        save: (id) ->
+            console.log "no 'saved' tag is known"  unless globalSavedTagId?
+            $http.put("data/tag.json",
+                tagId: globalSavedTagId
+                entryId: id
+            ).error(->
+                alert "error saving item"
+            )
+        unsave: (id) ->
+            console.log "no 'saved' tag is known"  unless globalSavedTagId?
+            $http.delete("data/untag.json",
+                tagId: globalSavedTagId
+                entryId: id
+            ).error(->
+                alert "error unsaving item"
+            )
+        read: (id) ->
+            $http.post("data/read.json",
+                id: id
+            ).error(->
+                console.log "error marking item read"
+            )
     ])

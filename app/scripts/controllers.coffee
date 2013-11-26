@@ -22,27 +22,11 @@ angular.module("ThatOneFeed.controllers", [])
 .controller("ViewerCtrl", ["$scope", ($scope) ->
         $scope.templateUrl = "partials/_entry_select_category.html"
     ])
-.controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", ($routeParams, $window, $scope, entries, ripper) ->
+.controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", "markers", ($routeParams, $window, $scope, entries, ripper, markers) ->
         index = -1
         continuation = `undefined`
         sync = ->
-#            clearTimeout(viewFlushTimeout)
-            it = $scope.item = (if index >= 0 and index < $scope.items.length then $scope.items[index] else null)
-
-            # todo: record read status
-#            if (it && it.id)
-#                found = false
-#                viewQueue.forEach((id) ->
-#                    if (it.id == id)
-#                        found = true
-#                );
-#                viewHistory.forEach((id) ->
-#                    if (it.id == id)
-#                        found = true
-#                );
-#                if (!found)
-#                    viewQueue.push(it.id)
-
+            $scope.item = (if index >= 0 and index < $scope.items.length then $scope.items[index] else null)
             # keep 200 items max, but retain at least 100 - 25 = 75 previous items
             if index > 100 and $scope.items.length > 200
                 $scope.items.splice 0, 25
@@ -61,12 +45,6 @@ angular.module("ThatOneFeed.controllers", [])
                 ), (data) ->
                     console.log "error loading entries", data
 
-        # todo: view queue?
-#        if (viewQueue.length > 10)
-#            flushViews()
-#        else
-#            viewFlushTimeout = setTimeout(flushViews, 5000)
-
         $scope.streamId = $routeParams.streamId
         $scope.items = []
         $scope.item = null
@@ -76,10 +54,6 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.next = ->
             if $scope.hasNext()
                 index += 1
-                # todo: read tracking
-#                $scope.$emit "_itemRead"
-                $scope.$broadcast('unscale');
-                $scope.zoom = true;
                 sync()
 
         $scope.skipRest = ->
@@ -96,9 +70,18 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.previous = ->
             if $scope.hasPrevious()
                 index -= 1
-                $scope.$broadcast('unscale');
-                $scope.zoom = true;
                 sync()
+
+        $scope.saveClass = ->
+            if $scope.item && $scope.item.saved then "saved" else null
+
+        $scope.toggleSaved = ->
+            if $scope.item
+                $scope.item.saved = ! $scope.item.saved
+                if $scope.item.saved
+                    markers.save($scope.item.id)
+                else
+                    markers.unsave($scope.item.id)
 
         $scope.$on "key", (e, ke) ->
 
@@ -112,10 +95,8 @@ angular.module("ThatOneFeed.controllers", [])
                     $scope.next()
                 when 75, 107 # K ,k
                     $scope.previous()
-
-                # todo: saving
-#                when 83, 115 # S, s
-#                    $scope.toggleSaved();
+                when 83, 115 # S, s
+                    $scope.toggleSaved();
                 when 68, 100 # D, d
                     $scope.skipRest()
                 when 65, 97, 90, 122 # A, a, Z, z
@@ -127,11 +108,15 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.$watch "item", ->
             $window.scrollTo 0, 0
+            $scope.$broadcast('unscale');
+            $scope.zoom = true;
             $scope.templateUrl = "partials/_entry_" + (if $scope.item then $scope.item.type else if index > 0 then 'done' else 'loading') + ".html"
+            if $scope.item && $scope.item.unread
+                $scope.item.unread = false
+                markers.read($scope.item.id)
 
         $scope.$on "$destroy", ->
             $scope.streamId = null
 
-        # todo: sync read status
         sync()
     ])

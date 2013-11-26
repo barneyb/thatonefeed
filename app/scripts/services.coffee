@@ -51,6 +51,7 @@ angular.module("ThatOneFeed.services", [])
             d.title = it.title
             d.link = (it.canonical or it.alternate)[0].href
             d.saved = it.saved
+            d.unread = it.unread
             d
 
         hiresRE = /^(.*tumblr\.com.*_)[1-9][0-9]{2}(\.(jp(?:e?)g|png))$/
