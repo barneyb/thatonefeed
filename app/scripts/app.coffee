@@ -2,6 +2,7 @@
 angular.module("ThatOneFeed", [
         "ngRoute",
         "ThatOneFeed.filters",
+        "ThatOneFeed.resources",
         "ThatOneFeed.services",
         "ThatOneFeed.directives",
         "ThatOneFeed.controllers"
