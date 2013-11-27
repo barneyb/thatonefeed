@@ -21,8 +21,9 @@ angular.module("ThatOneFeed.resources", [])
         (base, params) ->
             s = "#{c.dataDir}/#{base}.#{c.dataExtension}"
             if params?
-                s += "?" + for n, v of params
+                s += "?" + (for n, v of params
                     n + "=" + encodeURIComponent(v || '')
+                ).join("&")
             s
     ])
 .factory("profile", ["$http", "wrapHttp", "syncPromise", "dataUrl", ($http, wrapHttp, sync, dataUrl) ->
