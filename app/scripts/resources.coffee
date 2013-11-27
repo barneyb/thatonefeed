@@ -19,7 +19,7 @@ angular.module("ThatOneFeed.resources", [])
 .factory("dataUrl", ["config", (config) ->
         c = config()
         (base, params) ->
-            s = "data/#{base}.#{c.dataExtension}"
+            s = "#{c.dataDir}/#{base}.#{c.dataExtension}"
             if params?
                 s += "?" + for n, v of params
                     n + "=" + encodeURIComponent(v || '')
