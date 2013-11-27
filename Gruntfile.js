@@ -23,10 +23,10 @@ module.exports = function (grunt) {
         concat: {
             vendor_js: {
                 src: [
-                    'app/lib/moment.js',
-                    'app/lib/jquery/jquery.js',
-                    'app/lib/angular/angular.js',
-                    'app/lib/angular/angular-route.js'
+                    'lib/moment.js',
+                    'lib/jquery/jquery.js',
+                    'lib/angular/angular.js',
+                    'lib/angular/angular-route.js'
                 ],
                 dest: 'public/js/vendor.js'
             },
@@ -71,7 +71,7 @@ module.exports = function (grunt) {
             },
             vendor_js: {
                 files: [
-                    'app/lib/**/*.js'
+                    'lib/**/*.js'
                 ],
                 tasks: ['concat:vendor_js']
             },
