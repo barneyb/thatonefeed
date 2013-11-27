@@ -2,12 +2,15 @@ angular.module("ThatOneFeed.directives", [])
 .directive("tofMenu", [ ->
         restrict: "A"
         templateUrl: "partials/_sidebar.html",
-        controller: ["$scope", "profile", ($scope, profile) ->
+        controller: ["$scope", "$location", "profile", ($scope, $location, profile) ->
             $scope.name = null
             $scope.feedlyUrl = null
             profile.get().then (p) ->
                 $scope.name = p.givenName
                 $scope.feedlyUrl = p.apiRoot
+            , ->
+                $location.path "/"
+
         ]
     ])
 .directive("itemTitle", [ ->
@@ -69,5 +72,20 @@ angular.module("ThatOneFeed.directives", [])
                 es.bind "load", rescale
                 for e in es
                     rescale.call(e)
+        ]
+    ])
+.directive("oauthTrigger", [ ->
+        restrict: "A",
+        controller: ["$window", "$element", ($window, $element) ->
+            $element.bind "click", (e) ->
+                width = 500
+                height = 700
+                left = ($window.innerWidth - width) / 2
+                top = ($window.innerHeight - height) / 2
+                $window.open($element.attr("href"), "thatonefeed_oauth", "height=#{height},width=#{width},top=#{top},left=#{left},location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0,", "replace")
+                e.stopImmediatePropagation()
+                e.stopPropagation()
+                e.preventDefault()
+                false
         ]
     ])

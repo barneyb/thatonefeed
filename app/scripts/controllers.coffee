@@ -1,9 +1,8 @@
 angular.module("ThatOneFeed.controllers", [])
-.controller("SplashCtrl", ["$location", "profile", ($location, profile) ->
+.controller("SplashCtrl", ["$scope", "$location", "profile", "dataUrl", ($scope, $location, profile, dataUrl) ->
+        $scope.authUrl = dataUrl("auth")
         profile.get().then (d) ->
             $location.path "/view"
-        , () ->
-            console.log("failed to get profile - must need to log in")
     ])
 .controller("LogoutCtrl", ["$location", "profile", ($location, profile) ->
         profile.logout().then ->
