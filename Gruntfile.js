@@ -1,5 +1,8 @@
 module.exports = function (grunt) {
 
+//    var outdir = "public";
+    var outdir = "..";
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         less: {
@@ -28,19 +31,19 @@ module.exports = function (grunt) {
                     'lib/angular/angular.js',
                     'lib/angular/angular-route.js'
                 ],
-                dest: 'public/js/vendor.js'
+                dest: outdir + '/js/vendor.js'
             },
             app_js: {
                 src: [
                     'app/js/*.js'
                 ],
-                dest: 'public/js/app.js'
+                dest: outdir + '/js/app.js'
             },
             app_css: {
                 src: [
                     'app/css/*.css'
                 ],
-                dest: 'public/css/app.css'
+                dest: outdir + '/css/app.css'
             }
         },
         copy: {
@@ -50,7 +53,7 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'app/static/',
                         src: ['**'],
-                        dest: 'public/',
+                        dest: outdir + '/',
                         filter: 'isFile'
                     }
                 ]
@@ -114,7 +117,7 @@ module.exports = function (grunt) {
             }
         },
         clean: [
-            "public",
+            "public", // not outdir, in case we go up...
             "app/css/_*",
             "app/js/_*"
         ]
@@ -130,6 +133,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-angular-templates');
 
-    grunt.registerTask('default', ['clean', 'coffee', 'less', 'ngtemplates', 'concat', 'copy', 'watch']);
+    grunt.registerTask('build', ['clean', 'coffee', 'less', 'ngtemplates', 'concat', 'copy']);
+    grunt.registerTask('default', ['build']);
+    grunt.registerTask('client', ['build', 'watch']);
 
 };

@@ -3,8 +3,9 @@
     "version": "0.0.1",
     "description": "A content-centric interface for Feedly.",
     "scripts": {
-        "start": "grunt",
-        "stop": "grunt clean"
+        "build": "grunt",
+        "client": "grunt client",
+        "clean": "grunt clean"
     },
     "devDependencies": {
         "phantomjs": "~1.9",
