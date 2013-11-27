@@ -10,8 +10,7 @@ DELETE - log out/delete cookie, nothing to feedly
         </cfhttp>
         <cfset json = deserializeJSON(cfhttp.filecontent) />
         <cfset json['apiRoot'] = request.api.root />
-        <cfcontent type="application/json" reset="true"
-        /><cfoutput>#serializeJSON(json)#</cfoutput>
+        <cfset request.render(json) />
     <cfelse>
         <cfheader statuscode="401" statustext="Unauthorized. Muahhhahahahhahahha." />
         <cfcontent type="application/json" reset="true"

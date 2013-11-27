@@ -106,4 +106,10 @@
         <cfcookie name="#request.cookieName#" value="{}" expires="now" />
     </cffunction>
 
+    <cffunction name="render">
+        <cfargument name="body" />
+        <cfcontent type="application/json" reset="true"
+        /><cfoutput>#isSimpleValue(body) ? body : serializeJSON(body)#</cfoutput><cfabort />
+    </cffunction>
+
 </cfcomponent>
