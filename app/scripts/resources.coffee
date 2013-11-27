@@ -102,7 +102,7 @@ angular.module("ThatOneFeed.resources", [])
             ))
         unsave: (id) ->
             return syncFail(null) unless globalSavedTagId?
-            wrap($http.delete(dataUrl("untag"),
+            wrap($http.delete(dataUrl("tag"),
                 tagId: globalSavedTagId
                 entryId: id
             ))
