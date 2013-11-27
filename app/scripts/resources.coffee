@@ -40,13 +40,19 @@ angular.module("ThatOneFeed.resources", [])
             wrapHttp($http.delete(dataUrl("profile"))).then ->
                 profile = null
     ])
-.factory("categories", ["$http", "$q", "dataUrl", ($http, $q, dataUrl) ->
+.factory("categories", ["$http", "$q", "$timeout", "dataUrl", ($http, $q, $timeout, dataUrl) ->
         cats = null
         (forceRefresh) ->
             deferred = $q.defer()
             counts = null
             process = ->
-                return if not cats? or not counts?
+                if not cats?
+                    return
+
+                if not counts?
+                    deferred.notify cats
+                    return
+
                 # reset
                 cats.forEach (it) ->
                     it.unreadCount = 0
@@ -59,7 +65,10 @@ angular.module("ThatOneFeed.resources", [])
                 deferred.resolve cats
 
             cats = null    if forceRefresh
-            unless cats?
+            if cats?
+                $timeout ->
+                    deferred.notify cats
+            else
                 $http.get(dataUrl("categories"))
                 .success (data) ->
                     cats = data

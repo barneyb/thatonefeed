@@ -34,10 +34,12 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.activeClass = (id) ->
             (if $scope.streamId is id then "active" else null)
 
-        cats().then ((data) ->
+        cats().then (data) ->
             $scope.categories = data
-        ), (data) ->
+        , (data) ->
             console.log "error loading categories", data
+        , (data) ->
+            $scope.categories = data
     ])
 .controller("ViewerCtrl", ["$scope", ($scope) ->
         $scope.templateUrl = "partials/_entry_select_category.html"
