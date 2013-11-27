@@ -1,4 +1,12 @@
 angular.module("ThatOneFeed.services", [])
+.factory("qs", ["$window", ($window) ->
+        ->
+            ps = {}
+            for s in $window.location.search.substr(1).split("&")
+                a = s.split("=")
+                ps[a.shift()] = a.join("=")
+            ps
+    ])
 .factory("syncPromise", ["$q", "$timeout", ($q, $timeout) ->
         (resolution) ->
             d = $q.defer()

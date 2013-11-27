@@ -1,8 +1,22 @@
 angular.module("ThatOneFeed.controllers", [])
-.controller("SplashCtrl", ["$scope", "$location", "profile", "dataUrl", ($scope, $location, profile, dataUrl) ->
+.controller("SplashCtrl", ["$scope", "$location", "profile", "dataUrl", "qs", ($scope, $location, profile, dataUrl, qs) ->
         $scope.authUrl = dataUrl("auth")
         profile.get().then (d) ->
             $location.path "/view"
+
+        passback = (target) ->
+            if window.opener
+                window.opener.location.hash = "#" + target
+                window.close()
+            else
+                $location.path target
+
+        q = qs()
+        if q.code
+            profile.auth(q.code).then ->
+                passback "/view"
+        else if q.error
+            passback "/decline"
     ])
 .controller("LogoutCtrl", ["$location", "profile", ($location, profile) ->
         profile.logout().then ->

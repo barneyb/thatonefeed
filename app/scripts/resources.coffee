@@ -32,6 +32,10 @@ angular.module("ThatOneFeed.resources", [])
             return sync(profile) if profile?
             wrapHttp($http.get(dataUrl("profile"))).then (d) ->
                 profile = d
+        auth: (code) ->
+            wrapHttp($http.post(dataUrl("auth",
+                code: code
+            )))
         logout: () ->
             wrapHttp($http.delete(dataUrl("profile"))).then ->
                 profile = null
