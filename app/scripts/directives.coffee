@@ -23,10 +23,10 @@ angular.module("ThatOneFeed.directives", [])
             rescale = ->
                 w = $element.width()
                 h = $element.height()
-                p = $element.parent()
+                p = $element.parents(".item").first()
                 pw = p.width()
-                ph = p.height() * 2 - 20 # padding
-                p.parent().children().each ->
+                ph = p.height() + h - 10 # padding
+                p.children().each ->
                     ph -= angular.element(this).height()
                 factor = Math.min(3, Math.min(pw / w, ph / h))
                 if $scope.zoom or factor < 1
