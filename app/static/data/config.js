@@ -3,4 +3,6 @@ window.ThatOneFeed = {
     dataExtension: "json"
 //    dataDir: "../server",
 //    dataExtension: "cfm"
+//    dataDir: "thatonefeed/server",
+//    dataExtension: "cfm"
 };
