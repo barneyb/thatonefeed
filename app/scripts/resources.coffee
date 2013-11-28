@@ -62,7 +62,8 @@ angular.module("ThatOneFeed.resources", [])
                     cats.forEach (it) ->
                         it.unreadCount = urc.count    if it.id is urc.id
 
-                deferred.resolve cats
+                deferred.resolve cats.filter (it) ->
+                    it.unreadCount? && it.unreadCount > 0
 
             cats = null    if forceRefresh
             if cats?
