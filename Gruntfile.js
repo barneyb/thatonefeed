@@ -1,7 +1,7 @@
 module.exports = function (grunt) {
 
-//    var outdir = "public";
-    var outdir = "..";
+    var outdir = "public";
+//    var outdir = "..";
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -22,7 +22,31 @@ module.exports = function (grunt) {
                 }
             }
         },
-        // todo: uglify (already in scope) instead of concat?
+        uglify: {
+            vendor_js: {
+                files: function() {
+                    var r = {};
+                    r[outdir + "/js/vendor.js"] = [outdir + "/js/vendor.js"];
+                    return r;
+                }()
+            },
+            app_js: {
+                files: function() {
+                    var r = {};
+                    r[outdir + "/js/app.js"] = [outdir + "/js/app.js"];
+                    return r;
+                }()
+            }
+        },
+        cssmin: {
+            app_css: {
+                files: function() {
+                    var r = {};
+                    r[outdir + "/css/app.css"] = [outdir + "/css/app.css"];
+                    return r;
+                }()
+            }
+        },
         concat: {
             vendor_js: {
                 src: [
@@ -54,6 +78,17 @@ module.exports = function (grunt) {
                         cwd: 'app/static/',
                         src: ['**'],
                         dest: outdir + '/',
+                        filter: 'isFile'
+                    }
+                ]
+            },
+            server: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'server/',
+                        src: ['**'],
+                        dest: outdir + '/data',
                         filter: 'isFile'
                     }
                 ]
@@ -100,7 +135,7 @@ module.exports = function (grunt) {
                 files: [
                     'app/static/**/*'
                 ],
-                tasks: ['copy']
+                tasks: ['copy:static']
             }
         },
         ngtemplates: {
@@ -116,11 +151,18 @@ module.exports = function (grunt) {
                 dest: 'app/js/_templates.js'
             }
         },
-        clean: [
-            "public", // not outdir, in case we go up...
-            "app/css/_*",
-            "app/js/_*"
-        ]
+        clean: {
+            all: [
+                "public", // not outdir, in case we go up...
+                "target",
+                "app/css/_*",
+                "app/js/_*"
+            ],
+            static: [
+                outdir + "/data",
+                outdir + "/images"
+            ]
+        }
     });
 
     // Load the plugin
@@ -130,11 +172,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-angular-templates');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('build', ['clean', 'coffee', 'less', 'ngtemplates', 'concat', 'copy']);
+    grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static']);
     grunt.registerTask('default', ['build']);
     grunt.registerTask('client', ['build', 'watch']);
+    grunt.registerTask('package', ['build', 'clean:static', 'copy:server', "uglify", "cssmin"]);
 
 };
