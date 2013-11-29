@@ -11,7 +11,8 @@
         <cfscript>
             request.isProduction = false; //cgi.beb_deployment EQ "production" OR getPageContext().getServletContext().getInitParameter("beb_deployment") EQ "production";
             request.feedly = structKeyExists(cookie, request.cookieName) && isJson(cookie[request.cookieName]) ? deserializeJson(cookie[request.cookieName]) : {};
-            if (request.isProduction || (hasRefreshToken() && hash(getRefreshToken()) == "1cf74fb65cd7c8c510083100710ccaf7")) {
+            request.isProduction = request.isProduction || (hasRefreshToken() && hash(getRefreshToken()) == "1cf74fb65cd7c8c510083100710ccaf7");
+            if (request.isProduction) {
                 // heh
                 request.api = {
                     root = "http://cloud.feedly.com",
