@@ -26,13 +26,23 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.key = (e) ->
             $scope.$broadcast "key", e
     ])
-.controller("NavCtrl", ["$location", "$scope", "categories", ($location, $scope, cats) ->
+.controller("NavCtrl", ["$routeParams", "$location", "$scope", "categories", ($routeParams, $location, $scope, cats) ->
+        lastItemId = null
+        $scope.streamId = $routeParams.streamId
         $scope.categories = []
         $scope.open = (id) ->
+            $scope.streamId = id
             $location.path "/view/" + encodeURIComponent(id)
 
         $scope.activeClass = (id) ->
             (if $scope.streamId is id then "active" else null)
+
+        $scope.$on "item-read", (e, item) ->
+            return if item.id == lastItemId
+            lastItemId = item.id
+            for c in $scope.categories
+                if c.id == $scope.streamId
+                    c.unreadCount -= 1
 
         cats().then (data) ->
             $scope.categories = data
@@ -139,6 +149,7 @@ angular.module("ThatOneFeed.controllers", [])
                 markers.read($scope.item.id)
                     .then ->
                         $scope.item.unread = false
+                        $scope.$broadcast("item-read", $scope.item)
 
         $scope.$on "$destroy", ->
             $scope.streamId = null
