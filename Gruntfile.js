@@ -162,8 +162,16 @@ module.exports = function (grunt) {
                 outdir + "/data",
                 outdir + "/images"
             ]
+        },
+        exec: {
+            deploy: {
+                cmd: "rsync --progress --verbose --stats -a public/ barneyb@barneyb.com:/home/www/barneyb.com/thatonefeed/"
+            }
         }
     });
+
+//    // grunt --cat=fred // echo 'fred'
+//    console.log(grunt.option("cat"));
 
     // Load the plugin
     grunt.loadNpmTasks('grunt-contrib-less');
@@ -175,10 +183,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static']);
     grunt.registerTask('default', ['build']);
     grunt.registerTask('client', ['build', 'watch']);
     grunt.registerTask('package', ['build', 'clean:static', 'copy:server', "uglify", "cssmin"]);
+    grunt.registerTask('deploy', ['exec:deploy'])
 
 };

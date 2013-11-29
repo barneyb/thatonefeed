@@ -6,7 +6,8 @@
         "build": "grunt",
         "client": "grunt client",
         "clean": "grunt clean:all",
-        "package": "grunt package"
+        "package": "grunt package",
+        "deploy": "grunt deploy"
     },
     "devDependencies": {
         "phantomjs": "~1.9",
@@ -16,6 +17,7 @@
         "karma-ng-scenario": "~0.1",
 
         "grunt": "~0.4.1",
+        "grunt-exec": "~0.4.2",
         "grunt-cli": "~0.1.7",
         "grunt-contrib-watch": "~0.4.2",
         "grunt-contrib-clean": "~0.5.0",
