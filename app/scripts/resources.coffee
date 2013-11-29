@@ -45,7 +45,7 @@ angular.module("ThatOneFeed.resources", [])
         (forceRefresh) ->
             deferred = $q.defer()
             counts = null
-            filter = ->
+            filteredCats = ->
                 cats.filter (it) ->
                     it.unreadCount? && it.unreadCount > 0
             process = ->
@@ -65,12 +65,12 @@ angular.module("ThatOneFeed.resources", [])
                     cats.forEach (it) ->
                         it.unreadCount = urc.count    if it.id is urc.id
 
-                deferred.resolve filter
+                deferred.resolve filteredCats()
 
             cats = null    if forceRefresh
             if cats?
                 $timeout ->
-                    deferred.notify filter
+                    deferred.notify filteredCats()
             else
                 $http.get(dataUrl("categories"))
                 .success (data) ->
