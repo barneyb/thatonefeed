@@ -42,30 +42,30 @@ angular.module("ThatOneFeed.resources", [])
     ])
 .factory("categories", ["$http", "$q", "$timeout", "dataUrl", ($http, $q, $timeout, dataUrl) ->
         cats = null
-        (forceRefresh) ->
+        filteredCats = ->
+            cats.filter (it) ->
+                it.unreadCount? && it.unreadCount > 0
+        process = (deferred, counts) ->
+            if not cats?
+                return
+
+            if not counts?
+                deferred.notify cats
+                return
+
+            # reset
+            cats.forEach (it) ->
+                it.unreadCount = 0
+
+            # apply counts
+            counts.unreadcounts.forEach (urc) ->
+                cats.forEach (it) ->
+                    it.unreadCount = urc.count    if it.id is urc.id
+
+            deferred.resolve filteredCats()
+        load = (forceRefresh) ->
             deferred = $q.defer()
             counts = null
-            filteredCats = ->
-                cats.filter (it) ->
-                    it.unreadCount? && it.unreadCount > 0
-            process = ->
-                if not cats?
-                    return
-
-                if not counts?
-                    deferred.notify cats
-                    return
-
-                # reset
-                cats.forEach (it) ->
-                    it.unreadCount = 0
-
-                # apply counts
-                counts.unreadcounts.forEach (urc) ->
-                    cats.forEach (it) ->
-                        it.unreadCount = urc.count    if it.id is urc.id
-
-                deferred.resolve filteredCats()
 
             cats = null    if forceRefresh
             if cats?
@@ -75,14 +75,25 @@ angular.module("ThatOneFeed.resources", [])
                 $http.get(dataUrl("categories"))
                 .success (data) ->
                     cats = data
-                    process()
+                    process(deferred, counts)
 
             $http.get(dataUrl("counts"))
             .success (data) ->
                 counts = data
-                process()
+                process(deferred, counts)
 
             deferred.promise
+        counts = () ->
+            deferred = $q.defer()
+
+            $http.get(dataUrl("counts", background: true))
+            .success (data) ->
+                process(deferred, data)
+
+            deferred.promise
+
+        get: load
+        counts: counts
     ])
 .factory("entries", ["$http", "wrapHttp", "dataUrl", ($http, wrapHttp, dataUrl) ->
         (streamId, continuation) ->

@@ -26,7 +26,7 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.key = (e) ->
             $scope.$broadcast "key", e
     ])
-.controller("NavCtrl", ["$routeParams", "$location", "$scope", "categories", ($routeParams, $location, $scope, cats) ->
+.controller("NavCtrl", ["$routeParams", "$location", "$interval", "$scope", "categories", ($routeParams, $location, $interval, $scope, cats) ->
         lastItemId = null
         $scope.streamId = $routeParams.streamId
         $scope.categories = []
@@ -44,12 +44,17 @@ angular.module("ThatOneFeed.controllers", [])
                 if c.id == $scope.streamId
                     c.unreadCount -= 1
 
-        cats().then (data) ->
+        cats.get().then (data) ->
             $scope.categories = data
         , (data) ->
             console.log "error loading categories", data
         , (data) ->
             $scope.categories = data
+
+        $interval ->
+            cats.counts().then (data) ->
+                $scope.categories = data
+        , 1000 * 15
     ])
 .controller("ViewerCtrl", ["$scope", ($scope) ->
         $scope.templateUrl = "partials/_entry_select_category.html"
