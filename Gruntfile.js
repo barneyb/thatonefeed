@@ -165,7 +165,7 @@ module.exports = function (grunt) {
         },
         exec: {
             deploy: {
-                cmd: "rsync --progress --verbose --stats -a public/ barneyb@barneyb.com:/home/www/barneyb.com/thatonefeed/"
+                cmd: "rsync --progress --verbose --stats -a --delete-excluded --delete-after public/ barneyb@barneyb.com:/home/www/barneyb.com/thatonefeed/"
             }
         }
     });

@@ -2,13 +2,6 @@
     "name": "thatonefeed",
     "version": "0.0.1",
     "description": "A content-centric interface for Feedly.",
-    "scripts": {
-        "build": "grunt",
-        "client": "grunt client",
-        "clean": "grunt clean:all",
-        "package": "grunt package",
-        "deploy": "grunt deploy"
-    },
     "devDependencies": {
         "phantomjs": "~1.9",
         "karma": "~0.10",
