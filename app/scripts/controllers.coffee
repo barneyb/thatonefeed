@@ -51,10 +51,15 @@ angular.module("ThatOneFeed.controllers", [])
         , (data) ->
             $scope.categories = data
 
-        $interval ->
+        countInterval = $interval ->
+            console.log "get counts"
             cats.counts().then (data) ->
                 $scope.categories = data
-        , 1000 * 15
+        , 1000 * 30
+
+        $scope.$on "$destroy", ->
+            console.log("destroy")
+            $interval.cancel(countInterval)
     ])
 .controller("ViewerCtrl", ["$scope", ($scope) ->
         $scope.templateUrl = "partials/_entry_select_category.html"
