@@ -31,6 +31,8 @@ angular.module("ThatOneFeed.controllers", [])
         setCats = (cats) ->
             $scope.categories = cats.filter (it) ->
                 it.unreadCount? && it.unreadCount > 0
+            if $scope.categories? && $scope.categories.length == 0
+                $scope.categories = cats
 
         $scope.streamId = $routeParams.streamId
         $scope.categories = []
@@ -46,15 +48,15 @@ angular.module("ThatOneFeed.controllers", [])
             lastItemId = item.id
             for c in $scope.categories
                 if c.id == $scope.streamId
-                    c.unreadCount -= 1
+                    c.unreadCount -= 1 if c.unreadCount?
+                    break
 
         cats.get().then setCats, (data) ->
             console.log "error loading categories", data
         , setCats
 
         countInterval = $interval ->
-            cats.counts().then (data) ->
-                $scope.categories = data
+            cats.counts().then setCats
         , 1000 * 30
 
         $scope.$on "$destroy", ->
