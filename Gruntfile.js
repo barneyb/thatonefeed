@@ -1,7 +1,6 @@
 module.exports = function (grunt) {
 
-    var outdir = "public";
-//    var outdir = "..";
+    var outdir = grunt.option("server") ? ".." : "public";
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -169,9 +168,6 @@ module.exports = function (grunt) {
             }
         }
     });
-
-//    // grunt --cat=fred // echo 'fred'
-//    console.log(grunt.option("cat"));
 
     // Load the plugin
     grunt.loadNpmTasks('grunt-contrib-less');
