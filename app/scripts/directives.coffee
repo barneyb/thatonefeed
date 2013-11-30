@@ -43,6 +43,9 @@ angular.module("ThatOneFeed.directives", [])
                 $element.addClass("loading").width("auto").height("auto")
 
             $scope.$on "rescale", rescale
+
+            $scope.$on "$destroy", ->
+                angular.element($window).unbind "resize", rescale
         ]
     ])
 .directive("scaledImageContainer", [ ->
