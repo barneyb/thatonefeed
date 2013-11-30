@@ -53,13 +53,11 @@ angular.module("ThatOneFeed.controllers", [])
         , setCats
 
         countInterval = $interval ->
-            console.log "get counts"
             cats.counts().then (data) ->
                 $scope.categories = data
         , 1000 * 30
 
         $scope.$on "$destroy", ->
-            console.log("destroy")
             $interval.cancel(countInterval)
     ])
 .controller("ViewerCtrl", ["$scope", ($scope) ->
