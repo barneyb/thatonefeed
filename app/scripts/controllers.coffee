@@ -131,14 +131,16 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.$on "key", (e, ke) ->
             switch ke.keyCode
+                # for j, k and space, the SHIFT key reverses behaviour
                 when 32 # SPACE
+                    # todo: if html entry, and not at top/bottom, ignore.  If image or at top/bottom of html, switch items
                     $scope[(if ke.shiftKey then "previous" else "next")]()
                     ke.stopImmediatePropagation()
                     ke.stopPropagation()
                     ke.preventDefault()
-                when 74, 106 # J, j
+                when 75, 106 # K, j
                     $scope.next()
-                when 75, 107 # K ,k
+                when 74, 107 # J ,k
                     $scope.previous()
                 when 83, 115 # S, s
                     $scope.toggleSaved();
