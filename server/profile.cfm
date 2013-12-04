@@ -4,7 +4,7 @@ DELETE - log out/delete cookie, nothing to feedly
 --->
 
 <cfif cgi.request_method EQ "GET">
-    <cfif request.hasAccessToken()>
+    <cfif request.hasAccessToken() OR request.hasRefreshToken()>
         <cfhttp url="#request.api.root#/v3/profile" throwonerror="true">
             <cfhttpparam type="header" name="Authorization" value="OAuth #request.getAccessToken()#" />
         </cfhttp>

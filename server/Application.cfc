@@ -54,7 +54,7 @@
         	<cfhttp url="#request.api.root#/v3/auth/token"
         			method="post"
                     result="http">
-        		<cfhttpparam type="formfield" name="refresh_token" value="#getRefreshToken()#" />
+        		<cfhttpparam type="formfield" name="refresh_token" value="#request.getRefreshToken()#" />
         		<cfhttpparam type="formfield" name="client_id" value="#request.api.clientId#" />
         		<cfhttpparam type="formfield" name="client_secret" value="#request.api.clientSecret#" />
         		<cfhttpparam type="formfield" name="grant_type" value="refresh_token" />
@@ -64,7 +64,7 @@
         		<cfdump var="#http#" abort="true" />
         	</cfif>
         	<cfset var fc = deserializeJson(http.fileContent) />
-            <cfset updateCookie(request.feedly.rt, fc.access_token, fc.expires_in) />
+            <cfset request.updateCookie(request.feedly.rt, fc.access_token, fc.expires_in) />
         </cfif>
         <cfreturn request.feedly.at />
     </cffunction>
