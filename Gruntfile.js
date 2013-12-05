@@ -137,6 +137,15 @@ module.exports = function (grunt) {
                 tasks: ['copy:static']
             }
         },
+        connect: {
+            server: {
+                options: {
+                    port: 80,
+                    base: outdir,
+                    keepalive: true
+                }
+            }
+        },
         ngtemplates: {
             compile: {
                 options: {
@@ -179,6 +188,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static']);
