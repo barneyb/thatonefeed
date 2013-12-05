@@ -13,8 +13,7 @@ entryId: id
     </cfhttp>
     <cfset request.render(cfhttp.filecontent) />
 <cfelseif cgi.request_method EQ "DELETE">
-    <cfset data = deserializeJson(getHttpRequestData().content) />
-    <cfhttp method="DELETE" url="#request.api.root#/v3/tags/#urlEncodedFormat(data.tagId)#/#urlEncodedFormat(data.entryId)#" throwonerror="true">
+    <cfhttp method="DELETE" url="#request.api.root#/v3/tags/#urlEncodedFormat(url.tagId)#/#urlEncodedFormat(url.entryId)#" throwonerror="true">
     	<cfhttpparam type="header" name="Authorization" value="OAuth #request.getAccessToken()#" />
     </cfhttp>
     <cfset request.render(cfhttp.filecontent) />
