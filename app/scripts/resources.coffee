@@ -40,6 +40,16 @@ angular.module("ThatOneFeed.resources", [])
             wrapHttp($http.delete(dataUrl("profile"))).then ->
                 profile = null
     ])
+.factory("prefs", ["$http", "wrapHttp", "syncPromise", "dataUrl", ($http, wrapHttp, sync, dataUrl) ->
+        prefs = null
+        get: () ->
+            return sync(prefs) if prefs
+            wrapHttp($http.get(dataUrl("prefs"))).then (d) ->
+                prefs = d
+        set: (prefs) ->
+            wrapHttp($http.post(dataUrl("prefs"), prefs)).then (d) ->
+                prefs = d
+    ])
 .factory("categories", ["$http", "$q", "$timeout", "dataUrl", ($http, $q, $timeout, dataUrl) ->
         cats = null
         process = (deferred, counts) ->

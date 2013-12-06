@@ -50,7 +50,7 @@ angular.module("ThatOneFeed.controllers", [])
         else
             $scope.templateUrl = null
     ])
-.controller("NavCtrl", ["$routeParams", "$location", "$interval", "$scope", "categories", ($routeParams, $location, $interval, $scope, cats) ->
+.controller("NavCtrl", ["$routeParams", "$location", "$interval", "$scope", "categories", "prefs", ($routeParams, $location, $interval, $scope, cats, prefs) ->
         lastItemId = null
         setCats = (cats) ->
             $scope.categories = cats.filter (it) ->
@@ -115,6 +115,12 @@ angular.module("ThatOneFeed.controllers", [])
             switch ke.keyCode
                 when 63 # ?
                     toggleHelp()
+
+        prefs.get().then (p) ->
+            if p.showHelp != "0"
+                showHelp()
+                p.showHelp = "0"
+                prefs.set(p)
 
     ])
 .controller("ViewerCtrl", ["$scope", ($scope) ->
