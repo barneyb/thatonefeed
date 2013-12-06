@@ -75,9 +75,8 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: 'app/static/',
-                        src: ['**'],
-                        dest: outdir + '/',
-                        filter: 'isFile'
+                        src: ['index.html', 'data/*.*'],
+                        dest: outdir + '/'
                     }
                 ]
             },
@@ -86,9 +85,8 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: 'server/',
-                        src: ['**'],
-                        dest: outdir + '/data',
-                        filter: 'isFile'
+                        src: ['*.*'],
+                        dest: outdir + '/data'
                     }
                 ]
             }
