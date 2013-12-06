@@ -46,6 +46,19 @@ module.exports = function (grunt) {
                 }()
             }
         },
+        htmlmin: {
+            index_html: {
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+                files: function() {
+                    var r = {};
+                    r[outdir + "/index.html"] = [outdir + "/index.html"];
+                    return r;
+                }()
+            }
+        },
         concat: {
             vendor_js: {
                 src: [
@@ -149,7 +162,8 @@ module.exports = function (grunt) {
                 options: {
                     module: 'ThatOneFeed',
                     htmlmin: {
-                        removeComments: true
+                        removeComments: true,
+                        collapseWhitespace: true
                     }
                 },
                 cwd: 'app',
@@ -187,12 +201,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static']);
     grunt.registerTask('default', ['build']);
     grunt.registerTask('client', ['build', 'watch']);
-    grunt.registerTask('package', ['build', 'clean:static', 'copy:server', "uglify", "cssmin"]);
+    grunt.registerTask('package', ['build', 'clean:static', 'copy:server', "uglify", "cssmin", "htmlmin"]);
     grunt.registerTask('deploy', ['exec:deploy'])
 
 };
