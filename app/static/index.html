@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en" ng-app="ThatOneFeed" ng-controller="KeyCtrl" ng-keydown="down($event)" ng-keypress="press($event)" ng-keyup="up($event)">
+<html lang="en" ng-app="ThatOneFeed">
 <head>
     <meta charset="utf-8">
     <title>That One Feed</title>
     <link rel="stylesheet" href="css/app.css"/>
     <base target="_blank">
 </head>
-<body>
+<body ng-controller="BodyCtrl" ng-keydown="down($event)" ng-keypress="press($event)" ng-keyup="up($event)">
 <div ng-view></div>
 <script src="js/vendor.js"></script>
 <script src="data/config.js"></script>

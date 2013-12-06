@@ -22,10 +22,22 @@ angular.module("ThatOneFeed.controllers", [])
         profile.logout().then ->
             $location.url "/"
     ])
-.controller("KeyCtrl", ["$scope", ($scope) ->
+.controller("BodyCtrl", ["$window", "$element", "$scope", ($window, $element, $scope) ->
         $scope.down = (e) ->
             $scope.$broadcast "keydown", e
         $scope.press = (e) ->
+            if e.keyCode == 32
+                # it's a space
+                if e.shiftKey
+                    # trying to scroll up
+                    if $element.scrollTop() > 0
+                        # there is room, don't $broadcast
+                        return
+                else
+                    # trying to scroll down
+                    if $element[0].scrollHeight - $window.innerHeight > $element.scrollTop()
+                        # there is room, don't $broadcast
+                        return
             $scope.$broadcast "key", e
         $scope.up = (e) ->
             $scope.$broadcast "keyup", e
@@ -82,12 +94,20 @@ angular.module("ThatOneFeed.controllers", [])
             if escDereg
                 escDereg()
 
-        $scope.showHelp = false
-        $scope.clickHelp = ->
+        toggleHelp = ->
             if $scope.showHelp
                 hideHelp()
             else
                 showHelp()
+
+        $scope.showHelp = false
+        $scope.clickHelp = toggleHelp
+
+        $scope.$on "key", (e, ke) ->
+            switch ke.keyCode
+                when 63 # ?
+                    toggleHelp()
+
     ])
 .controller("ViewerCtrl", ["$scope", ($scope) ->
         $scope.templateUrl = "partials/_entry_select_category.html"
@@ -160,7 +180,6 @@ angular.module("ThatOneFeed.controllers", [])
             switch ke.keyCode
                 # for j, k and space, the SHIFT key reverses behaviour
                 when 32 # SPACE
-                    # todo: if html entry, and not at top/bottom, ignore.  If image or at top/bottom of html, switch items
                     $scope[(if ke.shiftKey then "previous" else "next")]()
                     ke.stopImmediatePropagation()
                     ke.stopPropagation()
