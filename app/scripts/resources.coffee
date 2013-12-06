@@ -43,7 +43,7 @@ angular.module("ThatOneFeed.resources", [])
 .factory("prefs", ["$http", "wrapHttp", "syncPromise", "dataUrl", ($http, wrapHttp, sync, dataUrl) ->
         prefs = null
         get: () ->
-            return sync(prefs) if prefs
+            return sync(prefs) if prefs?
             wrapHttp($http.get(dataUrl("prefs"))).then (d) ->
                 prefs = d
         set: (prefs) ->
