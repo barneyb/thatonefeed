@@ -169,7 +169,7 @@ angular.module("ThatOneFeed.controllers", [])
                     break
 
         $scope.hasPrevious = ->
-            index > 0
+            index >= 0
 
         $scope.previous = ->
             if $scope.hasPrevious()
@@ -217,7 +217,16 @@ angular.module("ThatOneFeed.controllers", [])
             $window.scrollTo 0, 0
             $scope.$broadcast('unscale');
             $scope.zoom = true;
-            $scope.templateUrl = "partials/_entry_" + (if $scope.item then $scope.item.type else if index > 0 then 'done' else 'loading') + ".html"
+            $scope.templateUrl = "partials/_entry_" + (
+                if $scope.item
+                    $scope.item.type
+                else if $scope.items.length == 0
+                    'loading'
+                else if index > 0
+                    'end'
+                else
+                    'start'
+            ) + ".html"
             if $scope.item && $scope.item.unread
                 markers.read($scope.item.id)
                     .then ->
