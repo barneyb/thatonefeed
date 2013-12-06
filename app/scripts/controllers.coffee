@@ -42,6 +42,14 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.up = (e) ->
             $scope.$broadcast "keyup", e
     ])
+.controller("PageCtrl", ["$routeParams", "$templateCache", "$scope", ($routeParams, $templateCache, $scope) ->
+        pageId = $routeParams.pageId
+        partial = "partials/" + pageId + ".html"
+        if pageId.indexOf("_") != 0 && $templateCache.get(partial)
+            $scope.templateUrl = partial
+        else
+            $scope.templateUrl = null
+    ])
 .controller("NavCtrl", ["$routeParams", "$location", "$interval", "$scope", "categories", ($routeParams, $location, $interval, $scope, cats) ->
         lastItemId = null
         setCats = (cats) ->

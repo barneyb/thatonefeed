@@ -28,6 +28,10 @@ angular.module("ThatOneFeed", [
             templateUrl: "partials/stream.html"
             controller: "StreamCtrl"
 
+        $router.when "/page/:pageId",
+            templateUrl: "partials/_page.html"
+            controller: "PageCtrl"
+
         $router.otherwise
             redirectTo: "/"
     ])
