@@ -23,8 +23,12 @@ angular.module("ThatOneFeed.controllers", [])
             $location.url "/"
     ])
 .controller("KeyCtrl", ["$scope", ($scope) ->
-        $scope.key = (e) ->
+        $scope.down = (e) ->
+            $scope.$broadcast "keydown", e
+        $scope.press = (e) ->
             $scope.$broadcast "key", e
+        $scope.up = (e) ->
+            $scope.$broadcast "keyup", e
     ])
 .controller("NavCtrl", ["$routeParams", "$location", "$interval", "$scope", "categories", ($routeParams, $location, $interval, $scope, cats) ->
         lastItemId = null
@@ -61,6 +65,29 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.$on "$destroy", ->
             $interval.cancel(countInterval)
+
+        # help stuff
+        escDereg = null
+        escHandler = (e, ke) ->
+            switch ke.keyCode
+                when 27 # ESC
+                    hideHelp()
+
+        showHelp = ->
+            $scope.showHelp = true
+            escDereg = $scope.$on "keydown", escHandler
+
+        hideHelp = ->
+            $scope.showHelp = false
+            if escDereg
+                escDereg()
+
+        $scope.showHelp = false
+        $scope.clickHelp = ->
+            if $scope.showHelp
+                hideHelp()
+            else
+                showHelp()
     ])
 .controller("ViewerCtrl", ["$scope", ($scope) ->
         $scope.templateUrl = "partials/_entry_select_category.html"

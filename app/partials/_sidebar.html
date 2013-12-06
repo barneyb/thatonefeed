@@ -6,8 +6,35 @@
         <li ng-repeat="c in categories" ng-click="open(c.id)" ng-class="activeClass(c.id)"><span class="count" ng-show="c.unreadCount">({{c.unreadCount}})</span>{{c.label}}</li>
     </ul>
     <div class="footer" ng-show="feedlyUrl">
-        <p>{{name}} | <a href="#/logout" class="logout">Logout</a>
+        <p>{{name}} | <a ng-click="clickHelp()">Help</a> | <a href="#/logout">Logout</a>
         </p>
         <a href="{{feedlyUrl}}" class="feedly-link">Feedly</a>
+    </div>
+    <div class="help" ng-show="showHelp" ng-click="clickHelp()">
+    <h1>Help</h1>
+
+    <p>That One Feed is operated with your keyboard, using similar shortcuts to the
+    ones that Feedly itself uses.
+    </p>
+
+    <dl>
+        <dt>j</dt>
+        <dd>Jump to the next item and mark it as read.</dd>
+        <dt>k</dt>
+        <dd>Jump to the previous item.</dd>
+        <dt>s</dt>
+        <dd>Add (or remove) the current item from your saved list.</dd>
+        <dt>&lt;space&gt;</dt>
+        <dd>If you're viewing a visual item, jump to the next.  If you're reading a textual item and not already at the bottom, scroll down.</dd>
+        <dt>d</dt>
+        <dd>Jump to the first item of the next entry (skipping any remaining items from the current entry) and mark it read.</dd>
+        <dt>a, z</dt>
+        <dd>If you're viewing a visual item, adjust the zoom, either to full page (the default) or the content's natural size (which might larger or smaller).</dd>
+        <dt>&lt;esc&gt;</dt>
+        <dd>Close this help popup.</dd>
+    </dl>
+
+    <p>The SHIFT key may be used to reverse the direction of j, k, and &lt;space&gt; operations.
+    </p>
     </div>
 </div>

@@ -170,26 +170,30 @@ div.raw-html {
     line-height: 1.3em;
     padding-bottom: 30px;
 }
+.modal () {
+    position: fixed;
+    max-width: 40%;
+    text-align: left;
+    background-color: #444;
+    color: #eee;
+    padding: 3px 10px;
+    border-radius: 10px;
+}
 .image {
     &.loading {
         opacity: 0.5;
     }
 
     .caption {
-        position: fixed;
+        .modal;
+
         right: 5px;
         bottom: 5px;
-        max-width: 40%;
-        text-align: left;
-        background-color: #444;
-        color: #eee;
         font-size: 80%;
-        padding: 3px 10px;
-        border-radius: 10px;
         opacity: 0.10;
 
         > p:first-child {
-            margin-top: 0;
+           margin-top: 0;
         }
 
         &:hover {
@@ -226,5 +230,11 @@ div.raw-html {
             margin-left: 20px;
             margin-right: 0;
         }
-    }
+   }
+}
+
+.help {
+    .modal;
+    left: 5px;
+    bottom: 5px;
 }
