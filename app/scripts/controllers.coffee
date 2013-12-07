@@ -50,7 +50,7 @@ angular.module("ThatOneFeed.controllers", [])
         else
             $scope.templateUrl = null
     ])
-.controller("NavCtrl", ["$routeParams", "$location", "$interval", "$scope", "categories", "prefs", ($routeParams, $location, $interval, $scope, cats, prefs) ->
+.controller("NavCtrl", ["$routeParams", "$location", "$interval", "$scope", "categories", ($routeParams, $location, $interval, $scope, cats) ->
         lastItemId = null
         setCats = (cats) ->
             $scope.categories = cats.filter (it) ->
@@ -85,8 +85,8 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.$on "$destroy", ->
             $interval.cancel(countInterval)
-
-        # help stuff
+    ])
+.controller("GreetingCtrl", ["$scope", "prefs", ($scope, prefs) ->
         escDereg = null
         escHandler = (e, ke) ->
             switch ke.keyCode

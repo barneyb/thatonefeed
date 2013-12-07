@@ -5,11 +5,11 @@
     <ul ng-show="categories.length > 0">
         <li ng-repeat="c in categories" ng-click="open(c.id)" ng-class="activeClass(c.id)"><span class="count" ng-show="c.unreadCount">({{c.unreadCount}})</span>{{c.label}}</li>
     </ul>
-    <div class="footer" ng-show="feedlyUrl">
-        <p>{{name}} | <a ng-click="clickHelp()">Help</a> | <a href="#/logout">Logout</a>
-        </p>
-        <a href="{{feedlyUrl}}" class="feedly-link">Feedly</a>
-    </div>
+</div>
+<div id="nav-footer" ng-controller="GreetingCtrl">
+    <p>{{name}} | <a ng-click="clickHelp()">Help</a> | <a href="#/logout">Logout</a>
+    </p>
+
     <div class="help" ng-show="showHelp" ng-click="clickHelp()">
         <h3>Help</h3>
 
@@ -36,4 +36,6 @@
         <p>The <code>&lt;shift&gt;</code> key may be used to reverse the direction of <code>j</code>, <code>k</code>, <code>&lt;space&gt;</code>, and <code>d</code> operations.  This matches normal website behaviour, but not Feedly (where <code>&lt;shift&gt;</code> is used to operate at the feed/category level instead of reversing direction).
         </p>
     </div>
+
+    <a href="{{feedlyUrl}}" class="feedly-link" ng-show="feedlyUrl">Feedly</a>
 </div>
