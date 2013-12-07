@@ -1,6 +1,6 @@
 module.exports = function (grunt) {
 
-    var outdir = grunt.option("server") ? ".." : "public";
+    var outdir = grunt.option('server') ? '..' : 'public';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -25,23 +25,32 @@ module.exports = function (grunt) {
             vendor_js: {
                 files: function() {
                     var r = {};
-                    r[outdir + "/js/vendor.js"] = [outdir + "/js/vendor.js"];
+                    r[outdir + '/js/vendor.js'] = [outdir + '/js/vendor.js'];
                     return r;
                 }()
             },
             app_js: {
                 files: function() {
                     var r = {};
-                    r[outdir + "/js/app.js"] = [outdir + "/js/app.js"];
+                    r[outdir + '/js/app.js'] = [outdir + '/js/app.js'];
                     return r;
                 }()
+            }
+        },
+        imageEmbed: {
+            app_css: {
+                src: [ outdir + '/css/app.css' ],
+                dest: outdir + '/css/app.css',
+                options: {
+                    deleteAfterEncoding: false
+                }
             }
         },
         cssmin: {
             app_css: {
                 files: function() {
                     var r = {};
-                    r[outdir + "/css/app.css"] = [outdir + "/css/app.css"];
+                    r[outdir + '/css/app.css'] = [outdir + '/css/app.css'];
                     return r;
                 }()
             }
@@ -54,7 +63,7 @@ module.exports = function (grunt) {
                 },
                 files: function() {
                     var r = {};
-                    r[outdir + "/index.html"] = [outdir + "/index.html"];
+                    r[outdir + '/index.html'] = [outdir + '/index.html'];
                     return r;
                 }()
             }
@@ -190,19 +199,19 @@ module.exports = function (grunt) {
         },
         clean: {
             all: [
-                "public", // not outdir, in case we go up...
-                "target",
-                "app/css/_*",
-                "app/js/_*"
+                'public', // not outdir, in case we go up...
+                'target',
+                'app/css/_*',
+                'app/js/_*'
             ],
             static: [
-                outdir + "/data",
-                outdir + "/images"
+                outdir + '/data',
+                outdir + '/images'
             ]
         },
         exec: {
             deploy: {
-                cmd: "rsync --progress --verbose --stats -a --delete-excluded --delete-after public/ barneyb@barneyb.com:/home/www/barneyb.com/thatonefeed/"
+                cmd: 'rsync --progress --verbose --stats -a --delete-excluded --delete-after public/ barneyb@barneyb.com:/home/www/barneyb.com/thatonefeed/'
             }
         }
     });
@@ -217,6 +226,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-image-embed');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-exec');
@@ -224,7 +234,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static', 'copy:icons']);
     grunt.registerTask('default', ['build']);
     grunt.registerTask('client', ['build', 'watch']);
-    grunt.registerTask('package', ['build', 'clean:static', 'copy:server', "uglify", "cssmin", "htmlmin"]);
+    grunt.registerTask('package', ['build', 'imageEmbed', 'clean:static', 'copy:server', 'uglify', 'cssmin', 'htmlmin']);
     grunt.registerTask('deploy', ['exec:deploy'])
 
 };
