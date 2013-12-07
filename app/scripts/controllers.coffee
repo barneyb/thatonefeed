@@ -54,7 +54,7 @@ angular.module("ThatOneFeed.controllers", [])
         lastItemId = null
         setCats = (cats) ->
             $scope.categories = cats.filter (it) ->
-                it.unreadCount? && it.unreadCount > 0
+                it.id == $scope.streamId || (it.unreadCount? && it.unreadCount > 0)
             if $scope.categories? && $scope.categories.length == 0
                 $scope.categories = cats
 
@@ -72,7 +72,7 @@ angular.module("ThatOneFeed.controllers", [])
             lastItemId = item.id
             for c in $scope.categories
                 if c.id == $scope.streamId
-                    c.unreadCount -= 1 if c.unreadCount?
+                    c.unreadCount -= 1 if c.unreadCount? && c.unreadCount > 0
                     break
 
         cats.get().then setCats, (data) ->
