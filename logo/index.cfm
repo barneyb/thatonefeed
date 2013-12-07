@@ -9,7 +9,9 @@
 
         if (roundedCorners) {
             imageSetDrawingColor(img, bg);
-            imageDrawRoundRect(img, 0, 0, d - 1, d - 1, d / 8, d / 8, true);
+            var r = isNumeric(roundedCorners) ? roundedCorners : (d / 8);
+            writeDump(r);
+            imageDrawRoundRect(img, 0, 0, d - 1, d - 1, r, r, true);
         }
 
         var br = d / 2 * sqr(2);
@@ -47,7 +49,7 @@
     dir = getDirectoryFromPath(getCurrentTemplatePath());
     imageWrite(getImg(512, "33", "99", true), "#dir#/logo.png");
     imageWrite(getImg(152, "33", "aa", false), "#dir#/touch-icon.png");
-    imageWrite(getImg( 16, "99", "ff", false), "#dir#/favicon.png");
+    imageWrite(getImg( 16, "99", "ff", 10), "#dir#/favicon.png");
 </cfscript>
 <cfdirectory action="list"
     directory="#dir#"
@@ -55,7 +57,14 @@
     name="files"
     sort="size" />
 <cfoutput>
+<html>
+<head>
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+</head>
+<body>
 <cfloop query="files">
     <img src="#name#" />
 </cfloop>
+</body>
+</html>
 </cfoutput>
