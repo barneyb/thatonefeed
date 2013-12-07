@@ -160,13 +160,15 @@ angular.module("ThatOneFeed.controllers", [])
                 index += 1
                 sync()
 
-        $scope.skipRest = ->
+        $scope.nextEntry = ->
             if $scope.item and $scope.item.id
                 idToSkip = $scope.item.id
                 while $scope.hasNext()
                     $scope.next()
-                    continue    if $scope.item and $scope.item.id is idToSkip
+                    continue if $scope.item and $scope.item.id is idToSkip
                     break
+            else
+                $scope.next()
 
         $scope.hasPrevious = ->
             index >= 0
@@ -175,6 +177,16 @@ angular.module("ThatOneFeed.controllers", [])
             if $scope.hasPrevious()
                 index -= 1
                 sync()
+
+        $scope.previousEntry = ->
+            if $scope.item and $scope.item.id
+                idToSkip = $scope.item.id
+                while $scope.hasPrevious()
+                    $scope.previous()
+                    continue if $scope.item and $scope.item.id is idToSkip
+                    break
+            else
+                $scope.previous()
 
         $scope.saveClass = ->
             if $scope.item && $scope.item.saved then "saved" else null
@@ -192,7 +204,7 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.$on "key", (e, ke) ->
             switch ke.keyCode
-                # for j, k and space, the SHIFT key reverses behaviour
+                # for j, k space, and d, the SHIFT key reverses behaviour
                 when 32 # SPACE
                     $scope[(if ke.shiftKey then "previous" else "next")]()
                     ke.stopImmediatePropagation()
@@ -204,8 +216,10 @@ angular.module("ThatOneFeed.controllers", [])
                     $scope.previous()
                 when 83, 115 # S, s
                     $scope.toggleSaved();
-                when 68, 100 # D, d
-                    $scope.skipRest()
+                when 68 # D
+                    $scope.previousEntry()
+                when 100 # d
+                    $scope.nextEntry()
                 when 65, 97, 90, 122 # A, a, Z, z
                     $scope.zoom = ! $scope.zoom;
                     $scope.$broadcast('rescale');
