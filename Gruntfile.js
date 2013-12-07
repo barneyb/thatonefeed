@@ -97,8 +97,12 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'app/static/',
-                        src: ['**/*.*'],
+                        cwd: 'app/',
+                        src: [
+                            'data/**/*.*',
+                            'images/**/*.*',
+                            'index.html'
+                        ],
                         dest: outdir + '/'
                     }
                 ]
@@ -163,7 +167,9 @@ module.exports = function (grunt) {
             },
             static: {
                 files: [
-                    'app/static/**/*'
+                    'app/data/**/*.*',
+                    'app/images/**/*.*',
+                    'app/index.html'
                 ],
                 tasks: ['copy:static']
             },
