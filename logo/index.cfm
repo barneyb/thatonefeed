@@ -48,7 +48,7 @@
     dir = getDirectoryFromPath(getCurrentTemplatePath());
     imageWrite(getImg(512, "33", "99", true), "#dir#/logo.png");
     imageWrite(getImg(152, "33", "aa", false), "#dir#/touch-icon.png");
-    imageWrite(getImg( 16, "99", "ff", 8), "#dir#/favicon.png");
+    imageWrite(getImg( 32, "99", "ff", 8), "#dir#/favicon.png");
 </cfscript>
 <cfdirectory action="list"
     directory="#dir#"
