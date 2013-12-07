@@ -157,6 +157,12 @@ module.exports = function (grunt) {
                     'app/static/**/*'
                 ],
                 tasks: ['copy:static']
+            },
+            icons: {
+                files: [
+                    'logo/*.png'
+                ],
+                tasks: ['copy:icons']
             }
         },
         connect: {
