@@ -1,9 +1,8 @@
 <cfscript>
-    feedly = "6aba45";
-    bg = "000000";
-    function getImg(d, waveA, oneA, roundedCorners) {
-        wave = feedly & waveA;
-        one = feedly & oneA;
+    bg = "ffffff";
+    function getImg(d, waveA, oneA, roundedCorners, fg) {
+        wave = fg & waveA;
+        one = fg & oneA;
         var img = roundedCorners ? imageNew("", d, d, "argb") : imageNew("", d, d, "rgb", bg);
         imageSetAntialiasing(img, "on");
 
@@ -14,7 +13,7 @@
         }
 
         var br = d / 2 * sqr(2);
-        var t = d - (d - br) / 1.5;
+        var t = d - (d - br) / 2;
         var l = d / 2;
 
         var r = br / 16 * 15;
@@ -23,7 +22,7 @@
 
         r = br / 16 * 12;
         imageSetDrawingColor(img, bg);
-        imageDrawArc(img, l - r, t - r, r * 2, r * 2, 45, 90, "yes");
+        imageDrawArc(img, l - r, t - r, r * 2, r * 2, 30, 120, "yes");
 
         r = br / 16 * 9;
         imageSetDrawingColor(img, wave);
@@ -31,7 +30,7 @@
 
         r = br / 16 * 6;
         imageSetDrawingColor(img, bg);
-        imageDrawArc(img, l - r, t - r, r * 2, r * 2, 45, 90, "yes");
+        imageDrawArc(img, l - r, t - r, r * 2, r * 2, 30, 120, "yes");
 
         r = br / 16 * 3;
         imageSetDrawingColor(img, wave);
@@ -45,10 +44,11 @@
         return img;
     }
 
+    fg = "6aba45";
     dir = getDirectoryFromPath(getCurrentTemplatePath());
-    imageWrite(getImg(512, "33", "99", true), "#dir#/logo.png");
-    imageWrite(getImg(152, "33", "aa", false), "#dir#/touch-icon.png");
-    imageWrite(getImg( 32, "99", "ff", 8), "#dir#/favicon.png");
+    imageWrite(getImg(512, "33", "bb", true, fg), "#dir#/logo.png");
+    imageWrite(getImg(152, "33", "bb", false, fg), "#dir#/touch-icon.png");
+    imageWrite(getImg( 32, "66", "ee", 12, "4a9543"), "#dir#/favicon.png");
 </cfscript>
 <cfdirectory action="list"
     directory="#dir#"
@@ -60,7 +60,7 @@
 <head>
     <link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
     <style>
-        body { background-color: ##fee }
+        body { background-color: ##eeeef0 }
     </style>
 </head>
 <body>
