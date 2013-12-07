@@ -89,7 +89,7 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: 'app/static/',
-                        src: ['index.html', 'data/*.*'],
+                        src: ['**/*.*'],
                         dest: outdir + '/'
                     }
                 ]
