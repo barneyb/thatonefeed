@@ -93,6 +93,16 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            icons: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'logo/',
+                        src: ['*.*png'],
+                        dest: outdir + '/'
+                    }
+                ]
+            },
             server: {
                 files: [
                     {
@@ -204,7 +214,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static']);
+    grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static', 'copy:icons']);
     grunt.registerTask('default', ['build']);
     grunt.registerTask('client', ['build', 'watch']);
     grunt.registerTask('package', ['build', 'clean:static', 'copy:server', "uglify", "cssmin", "htmlmin"]);
