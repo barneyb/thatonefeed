@@ -1,7 +1,7 @@
 angular.module("ThatOneFeed.controllers", [])
 .controller("SplashCtrl", ["$scope", "$location", "profile", "dataUrl", "qs", ($scope, $location, profile, dataUrl, qs) ->
         $scope.authUrl = dataUrl("auth")
-        profile.get().then (d) ->
+        profile.get().then ->
             $location.path "/view"
 
         passback = (target) ->
