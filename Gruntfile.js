@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
 
-    var outdir = grunt.option('server') ? '..' : 'public';
+    var isServer = grunt.option('server');
+    var outdir = isServer ? '..' : 'public';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -126,6 +127,19 @@ module.exports = function (grunt) {
                         dest: outdir + '/data'
                     }
                 ]
+            },
+            server_config: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'app/data/',
+                        src: ['config.server.js'],
+                        dest: outdir + '/data',
+                        rename: function(dest, src) {
+                            return dest + "/config.js";
+                        }
+                    }
+                ]
             }
         },
         watch: {
@@ -206,6 +220,12 @@ module.exports = function (grunt) {
         clean: {
             all: [
                 'public', // not outdir, in case we go up...
+                // children of outdir
+                outdir + "/css",
+                outdir + "/data",
+                outdir + "/images",
+                outdir + "/js",
+                // internal stuff
                 'target',
                 'app/css/_*',
                 'app/js/_*'
@@ -239,7 +259,11 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static', 'copy:icons']);
     grunt.registerTask('default', ['build']);
-    grunt.registerTask('client', ['build', 'watch']);
+    var clientTasks = ['build', 'watch'];
+    if (isServer) {
+        clientTasks.splice(1, 0, "copy:server_config")
+    }
+    grunt.registerTask('client', clientTasks);
     grunt.registerTask('package', ['build', 'imageEmbed', 'clean:static', 'copy:server', 'uglify', 'cssmin', 'htmlmin']);
     grunt.registerTask('deploy', ['exec:deploy'])
 
