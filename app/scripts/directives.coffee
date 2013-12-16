@@ -59,7 +59,7 @@ angular.module("ThatOneFeed.directives", [])
                 return if nw is null or nw is 0 or nh is null or nh is 0
 
                 e = angular.element(this)
-                if nw < 200 or nh < 100
+                if nw < 200 and nh < 200
                     e.addClass "hide"
                     return
 
