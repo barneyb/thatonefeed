@@ -1,4 +1,4 @@
 window.ThatOneFeed = {
-    dataDir: "data",
-    dataExtension: "cfm"
+    dataDir: "data/",
+    dataExtension: ".cfm"
 };
