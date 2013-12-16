@@ -9,16 +9,22 @@
     <cffunction name="onRequestStart" output="false">
         <cfset var i = "" />
         <cfscript>
-            request.isProduction = false; //cgi.beb_deployment EQ "production" OR getPageContext().getServletContext().getInitParameter("beb_deployment") EQ "production";
+            request.isProduction = cgi.beb_deployment EQ "production" OR getPageContext().getServletContext().getInitParameter("beb_deployment") EQ "production";
             request.feedly = structKeyExists(cookie, request.cookieName) && isJson(cookie[request.cookieName]) ? deserializeJson(cookie[request.cookieName]) : {};
-            request.isProduction = request.isProduction || (hasRefreshToken() && hash(getRefreshToken()) == "1cf74fb65cd7c8c510083100710ccaf7");
-            if (request.isProduction) {
+            if (hasRefreshToken() && hash(getRefreshToken()) == "1cf74fb65cd7c8c510083100710ccaf7") {
                 // heh
                 request.api = {
                     root = "http://cloud.feedly.com",
                     clientId = "feedly",
                     clientSecret = "0XP4XQ07VVMDWBKUHTJM4WUQ",
                     redirectUri = "http://dev.feedly.com/feedly.html"
+                };
+            } else if (request.isProduction) {
+                request.api = {
+                    root = "http://cloud.feedly.com",
+                    clientId = "thatonefeed",
+                    clientSecret = "FE01FDTIPTQZABQRXE1LWIN06YKH",
+                    redirectUri = "http://thatonefeed.com"
                 };
             } else {
                 request.api = {
