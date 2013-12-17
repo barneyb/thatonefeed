@@ -59,7 +59,7 @@ angular.module("ThatOneFeed.controllers", [])
                 $scope.categories = cats
 
         $scope.streamId = $routeParams.streamId
-        $scope.categories = []
+        $scope.categories = null
         $scope.open = (id) ->
             $scope.streamId = id
             $location.path "/view/" + encodeURIComponent(id)
@@ -123,8 +123,14 @@ angular.module("ThatOneFeed.controllers", [])
                 prefs.set(p)
 
     ])
-.controller("ViewerCtrl", ["$scope", ($scope) ->
-        $scope.templateUrl = "partials/_entry_select_category.html"
+.controller("ViewerCtrl", ["$scope", "categories", ($scope, cats) ->
+        cats.get().then (data) ->
+            if data.length == 0
+                $scope.templateUrl = "partials/_entry_no_categories.html"
+            else if data.filter( (it) -> it.unreadCount? && it.unreadCount > 0 ).length == 0
+                $scope.templateUrl = "partials/_entry_no_unread.html"
+            else
+                $scope.templateUrl = "partials/_entry_select_category.html"
     ])
 .controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", "markers", ($routeParams, $window, $scope, entries, ripper, markers) ->
         index = -1
