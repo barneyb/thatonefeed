@@ -230,6 +230,14 @@ angular.module("ThatOneFeed.controllers", [])
                     $scope.zoom = ! $scope.zoom;
                     $scope.$broadcast('rescale');
 
+        $scope.$on "click-left", (e, ce) ->
+            $scope.$apply ->
+                $scope.previous()
+
+        $scope.$on "click-right", (e, ce) ->
+            $scope.$apply ->
+                $scope.next()
+
         unwatchItems = null
         unwatchItems = $scope.$watchCollection "items", ->
             if index < 0 and $scope.items.length > 0

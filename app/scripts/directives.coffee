@@ -92,3 +92,14 @@ angular.module("ThatOneFeed.directives", [])
                 false
         ]
     ])
+.directive("sideClick", [ ->
+        restrict: "A",
+        controller: ["$element", "$scope", ($element, $scope) ->
+            $element.bind "click", (e) ->
+                pos = e.offsetX / $element.width()
+                if pos <= 0.25
+                    $scope.$emit "click-left", e
+                else if pos >= 0.75
+                    $scope.$emit "click-right", e
+        ]
+    ])

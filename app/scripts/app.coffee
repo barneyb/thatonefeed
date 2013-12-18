@@ -1,7 +1,6 @@
 "use strict"
 angular.module("ThatOneFeed", [
         "ngRoute",
-        "ngTouch",
         "ThatOneFeed.filters",
         "ThatOneFeed.resources",
         "ThatOneFeed.services",

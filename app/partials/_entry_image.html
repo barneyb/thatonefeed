@@ -1,5 +1,5 @@
 <h2 item-title></h2>
 <div class="image">
     <img class="image" src="{{item.img}}" maximize-image />
-    <div class="caption" ng-bind-html="item.caption "></div>
+    <div class="caption" ng-bind-html="item.caption" ng-click="$event.stopPropagation()"></div>
 </div>

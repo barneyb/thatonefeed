@@ -75,8 +75,7 @@ module.exports = function (grunt) {
                     'lib/moment.js',
                     'lib/jquery/jquery.js',
                     'lib/angular/angular.js',
-                    'lib/angular/angular-route.js',
-                    'lib/angular/angular-touch.js'
+                    'lib/angular/angular-route.js'
                 ],
                 dest: outdir + '/js/vendor.js'
             },
