@@ -28,7 +28,7 @@ angular.module("ThatOneFeed.directives", [])
                 ph = p.height() + h - 10 # padding
                 p.children().each ->
                     ph -= angular.element(this).height()
-                factor = Math.min(3, Math.min(pw / w, (if $window.innerWidth < 800 then 3 else ph / h)))
+                factor = Math.min(3, Math.min(pw / w, (if $window.innerWidth <= 800 then 1000 else ph / h)))
                 if $scope.zoom or factor < 1
                     $element.width(Math.floor(w * factor) + "px").height(Math.floor(h * factor) + "px")
                 else
