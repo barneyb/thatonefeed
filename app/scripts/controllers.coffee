@@ -41,6 +41,8 @@ angular.module("ThatOneFeed.controllers", [])
             $scope.$broadcast "key", e
         $scope.up = (e) ->
             $scope.$broadcast "keyup", e
+        $scope.click = (e) ->
+            $scope.$broadcast "click", e
     ])
 .controller("PageCtrl", ["$routeParams", "$templateCache", "$scope", ($routeParams, $templateCache, $scope) ->
         pageId = $routeParams.pageId

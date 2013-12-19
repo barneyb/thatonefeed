@@ -168,41 +168,6 @@ h2 {
         text-align: center;
     }
 }
-@media (max-width: 820px) {
-    .splash,
-    .raw-html {
-        margin: auto 20px;
-    }
-}
-@media (max-width: 800px) {
-
-    #nav {
-        margin-left: -130px;
-
-        &:hover {
-            margin-left: 0px;
-        }
-    }
-
-    #content {
-        margin-left: 50px;
-    }
-
-    #nav li {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-
-    #nav-footer .help {
-        .touch {
-            display: block;
-        }
-        .no-touch {
-            display: none;
-        }
-    }
-
-}
 div.raw-html {
     border-top : 1px solid #f0f0f0;
     padding-top: 10px;
@@ -304,4 +269,48 @@ footer.copyright {
     position: fixed;
     left: 0;
     bottom: 0;
+}
+@media (max-width: 820px) {
+    .splash,
+    .raw-html {
+        margin: auto 20px;
+    }
+}
+@media (max-width: 800px) {
+
+    #nav {
+        margin-left: -130px;
+
+        &:hover,
+        &.touch {
+            margin-left: 0px;
+        }
+    }
+
+    #content {
+        margin-left: 50px;
+    }
+
+    #nav li {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #nav-footer .help {
+        .touch {
+            display: block;
+        }
+        .no-touch {
+            display: none;
+        }
+    }
+
+}
+@media (max-width: 800px) {
+
+    .image .caption {
+        position: inherit;
+        max-width: inherit;
+    }
+
 }
