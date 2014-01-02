@@ -39,10 +39,10 @@ angular.module("ThatOneFeed.directives", [])
 
             $element.bind "load", rescale
 
-            $scope.$on "unscale", ->
+            $scope.on "$destroy", $scope.$on "unscale", ->
                 $element.addClass("loading").width("auto").height("auto")
 
-            $scope.$on "rescale", rescale
+            $scope.on "$destroy", $scope.$on "rescale", rescale
 
             $scope.$on "$destroy", ->
                 angular.element($window).unbind "resize", rescale
@@ -109,7 +109,7 @@ angular.module("ThatOneFeed.directives", [])
             $element.bind "click", (e) ->
                 $element.addClass("touch")
 
-            $scope.$on "click", ->
+            $scope.on "$destroy", $scope.$on "click", ->
                 $element.removeClass("touch")
         ]
     ])
