@@ -69,7 +69,7 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.activeClass = (id) ->
             (if $scope.streamId is id then "active" else null)
 
-        $scope.on "$destroy", $scope.$on "item-read", (e, item) ->
+        $scope.$on "$destroy", $scope.$on "item-read", (e, item) ->
             return if item.id == lastItemId
             lastItemId = item.id
             for c in $scope.categories
@@ -98,7 +98,7 @@ angular.module("ThatOneFeed.controllers", [])
         showHelp = ->
             $scope.showHelp = true
             escDereg = $scope.$on "keydown", escHandler
-            $scope.on "$destroy", escDereg
+            $scope.$on "$destroy", escDereg
 
         hideHelp = ->
             $scope.showHelp = false
@@ -114,7 +114,7 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.showHelp = false
         $scope.clickHelp = toggleHelp
 
-        $scope.on "$destroy", $scope.$on "key", (e, ke) ->
+        $scope.$on "$destroy", $scope.$on "key", (e, ke) ->
             switch ke.keyCode
                 when 63 # ?
                     toggleHelp()
@@ -211,7 +211,7 @@ angular.module("ThatOneFeed.controllers", [])
                         .then ->
                             $scope.item.saved = true
 
-        $scope.on "$destroy", $scope.$on "key", (e, ke) ->
+        $scope.$on "$destroy", $scope.$on "key", (e, ke) ->
             switch ke.keyCode
                 # for j, k space, and d, the SHIFT key reverses behaviour
                 when 32 # SPACE
@@ -233,11 +233,11 @@ angular.module("ThatOneFeed.controllers", [])
                     $scope.zoom = ! $scope.zoom;
                     $scope.$broadcast('rescale');
 
-        $scope.on "$destroy", $scope.$on "click-left", (e, ce) ->
+        $scope.$on "$destroy", $scope.$on "click-left", (e, ce) ->
             $scope.$apply ->
                 $scope.previous()
 
-        $scope.on "$destroy", $scope.$on "click-right", (e, ce) ->
+        $scope.$on "$destroy", $scope.$on "click-right", (e, ce) ->
             $scope.$apply ->
                 $scope.next()
 
