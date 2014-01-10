@@ -91,7 +91,7 @@ angular.module("ThatOneFeed.services", [])
         (it) ->
             deferred = $q.defer()
 
-            # this should actually rip stuff, and notify per item.    resolve can hand out an item OR null.
+            # this should actually rip stuff, and notify per item.  resolve can hand out an item OR null.
             setTimeout (->
                 block = (it.content or it.summary).content
                 r = rip(block)
@@ -105,24 +105,27 @@ angular.module("ThatOneFeed.services", [])
                     # synchronous
                     asText r # we trust what feedly gave us
                 else
+                    processed = 0
                     # list of images - asynchronous
                     accepted = []
-                    rejectCount = 0
-                    pushAccepted = ->
-                        if accepted.length is 0
+                    resolveIfDone = ->
+                        processed += 1
+                        if processed < r.length
+                            # still more to come...
+                            return
 
+                        if accepted.length is 0
                             # revert back to textual.
                             asText block
                         else
                             accepted.forEach (it, idx) ->
-                                it.title = "(" + (idx + 1) + " of " + accepted.length + ") " + it.title    if accepted.length > 1
+                                if accepted.length > 1
+                                    it.title = "(#{idx + 1} of #{accepted.length}) #{it.title}"
                                 deferred.notify it
                             deferred.resolve()
 
-
                     reject = (item, itemIndex) ->
-                        rejectCount += 1
-                        pushAccepted()    if accepted.length + rejectCount is r.length
+                        resolveIfDone()
 
                     accept = (item, itemIndex, img) ->
                         nw = img.naturalWidth
@@ -135,15 +138,14 @@ angular.module("ThatOneFeed.services", [])
                             img: img.src
                             caption: item.caption
                         )
-                        accepted.push hires(partial)
-                        pushAccepted()    if accepted.length + rejectCount is r.length
+                        accepted[itemIndex] = hires(partial)
+                        resolveIfDone()
 
                     r.forEach (item, itemIndex) ->
                         promiseImage(item.src).then ((img) ->
                             accept item, itemIndex, img
                         ), ->
                             reject item, itemIndex
-
 
             ), 200
             deferred.promise
