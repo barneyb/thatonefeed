@@ -131,7 +131,7 @@ angular.module("ThatOneFeed.services", [])
                         nw = img.naturalWidth
                         nh = img.naturalHeight
                         if nw < 200 or nh < 100 or (nw < 400 and nh < 150)
-                            reject item
+                            reject item, itemIndex
                             return
                         partial = core(it,
                             type: "image"
