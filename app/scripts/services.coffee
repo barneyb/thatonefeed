@@ -96,7 +96,7 @@ angular.module("ThatOneFeed.services", [])
                 block = (it.content or it.summary).content
                 r = rip(block)
                 asText = (body) ->
-                    deferred.notify core(it,
+                    deferred.resolve core(it,
                         type: "html"
                         content: $sce.trustAsHtml(body)
                     )
@@ -104,7 +104,6 @@ angular.module("ThatOneFeed.services", [])
                 if typeof r is "string"
                     # synchronous
                     asText r # we trust what feedly gave us
-                    deferred.resolve()
                 else
                     # list of images - asynchronous
                     accepted = []
@@ -118,6 +117,7 @@ angular.module("ThatOneFeed.services", [])
                             accepted.forEach (it, idx) ->
                                 it.title = "(" + (idx + 1) + " of " + accepted.length + ") " + it.title    if accepted.length > 1
                                 deferred.notify it
+                            deferred.resolve()
 
 
                     reject = (item, itemIndex) ->
