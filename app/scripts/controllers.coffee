@@ -138,6 +138,8 @@ angular.module("ThatOneFeed.controllers", [])
 .controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", "markers", ($routeParams, $window, $scope, entries, ripper, markers) ->
         index = -1
         continuation = `undefined`
+        showOnLoad = true
+        inFlight = false
         sync = ->
             $scope.item = (if index >= 0 and index < $scope.items.length then $scope.items[index] else null)
             # keep 200 items max, but retain at least 100 - 25 = 75 previous items
@@ -145,16 +147,24 @@ angular.module("ThatOneFeed.controllers", [])
                 $scope.items.splice 0, 25
                 index -= 25
             if index > $scope.items.length - 8 and continuation isnt null
+                inFlight = true
                 entries($scope.streamId, continuation).then ((data) ->
                     if data.id is $scope.streamId and (continuation is `undefined` or continuation isnt data.continuation)
                         continuation = (if data.continuation then data.continuation else null)
-                        data.items.forEach (it) ->
-                            ripper(it).then (item) ->
-                                $scope.items.push item    if item
-                            , (err) ->
-                                console.log "error ripping entry", err
-                            , (item) ->
+                        addIt = (item) ->
+                            if item
                                 $scope.items.push item
+                                if showOnLoad
+                                    $scope.next()
+                                    showOnLoad = false
+                        ripCount = 0
+                        data.items.forEach (it) ->
+                            ripper(it).then(addIt
+                                , (err) ->
+                                    console.log "error ripping entry", err
+                                , addIt
+                            ).finally ->
+                                inFlight = false if ++ripCount == data.items.length
                 ), (data) ->
                     console.log "error loading entries", data
 
@@ -241,12 +251,6 @@ angular.module("ThatOneFeed.controllers", [])
             $scope.$apply ->
                 $scope.next()
 
-        unwatchItems = null
-        unwatchItems = $scope.$watchCollection "items", ->
-            if index < 0 and $scope.items.length > 0
-                $scope.next()
-                unwatchItems() if unwatchItems?
-
         $scope.$watch "item", ->
             $window.scrollTo 0, 0
             $scope.$broadcast('unscale');
@@ -256,16 +260,21 @@ angular.module("ThatOneFeed.controllers", [])
                     $scope.item.type
                 else if $scope.items.length == 0
                     'loading'
+                else if inFlight
+                    showOnLoad = true
+                    'in_flight'
                 else if index > 0
                     'end'
                 else
                     'start'
             ) + ".html"
             if $scope.item && $scope.item.unread
-                markers.read($scope.item.id)
-                    .then ->
-                        $scope.item.unread = false
-                        $scope.$broadcast("item-read", $scope.item)
+                ((it) ->
+                    markers.read(it.id)
+                        .then ->
+                            it.unread = false
+                            $scope.$broadcast("item-read", it)
+                )($scope.item)
 
         $scope.$on "$destroy", ->
             $scope.streamId = null
