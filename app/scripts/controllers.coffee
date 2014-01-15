@@ -212,14 +212,16 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.toggleSaved = ->
             if $scope.item
-                if $scope.item.saved
-                    markers.unsave($scope.item.id)
-                        .then ->
-                            $scope.item.saved = false
-                else
-                    markers.save($scope.item.id)
-                        .then ->
-                            $scope.item.saved = true
+                ((it) ->
+                    if it.saved
+                        markers.unsave(it.id)
+                            .then ->
+                                it.saved = false
+                    else
+                        markers.save(it.id)
+                            .then ->
+                                it.saved = true
+                )($scope.item)
 
         $scope.$on "$destroy", $scope.$on "key", (e, ke) ->
             switch ke.keyCode
