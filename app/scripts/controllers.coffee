@@ -55,6 +55,10 @@ angular.module("ThatOneFeed.controllers", [])
 .controller("NavCtrl", ["$routeParams", "$location", "$interval", "$scope", "categories", ($routeParams, $location, $interval, $scope, cats) ->
         lastItemId = null
         setCats = (cats) ->
+            cats.sort (a, b) ->
+                return -1 if a.label < b.label
+                return 1 if a.label > b.label
+                0
             $scope.categories = cats.filter (it) ->
                 it.id == $scope.streamId || (it.unreadCount? && it.unreadCount > 0)
             if $scope.categories? && $scope.categories.length == 0
