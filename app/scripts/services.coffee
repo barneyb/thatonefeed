@@ -51,11 +51,13 @@ angular.module("ThatOneFeed.services", [])
             caption += block
 
             caption = caption
-            .replace(/(<\/?iframe[^>]*>)+/g, "") # remove IFRAME
-            .replace(/<([a-z0-9])[^>]*>\s*<\/\1[^>]*>/g, "") # remove empty tags
-            .replace(/(<br[^>]*>\s*)+/g, "$1") # collapse multiple BR
-            .replace(/<br[^>]*>\s*(<\/?(p|blockquote)[^a-z])/g, "$1") # remove BR before P/BLOCKQUOTE
-            .replace(/(<\/?(p|blockquote)[^a-z])\s*<br[^>]*>/g, "$1") # remove BR after P/BLOCKQUOTE
+            .replace(/(<\/?iframe[^>]*>)+/gi, "") # remove IFRAME
+            .replace(/<([a-z0-9])[^>]*>\s*<\/\1[^>]*>/gi, "") # remove empty tags
+            .replace(/(<br[^>]*>\s*)+/gi, "$1") # collapse multiple BR
+            .replace(/<br[^>]*>\s*(<\/?(p|blockquote)[^a-z])/gi, "$1") # remove BR before P/BLOCKQUOTE
+            .replace(/(<\/?(p|blockquote)[^a-z])\s*<br[^>]*>/gi, "$1") # remove BR after P/BLOCKQUOTE
+            .replace(/^\s*<br[^>]*>/i, "") # remove BR at start
+            .replace(/<br[^>]*>\s*$/i, "") # remove BR at end
 
             caption = $sce.trustAsHtml(caption) # we trust what feedly gave us
             imgs.forEach (it) ->
