@@ -293,15 +293,22 @@ footer.copyright {
 
     #nav {
         margin-left: -130px;
+        opacity: 0.25;
 
         &:hover,
         &.touch {
             margin-left: 0px;
+            opacity: 0.9;
+        }
+
+        li {
+            padding-top: 10px;
+            padding-bottom: 10px;
         }
     }
 
     #content {
-        margin-left: 50px;
+        margin-left: 10px;
     }
 
     #nav li {
@@ -323,6 +330,11 @@ footer.copyright {
 
         .save {
             background-position: 0 0;
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 20px;
+            height: 20px;
         }
 
         .origin {
