@@ -3,7 +3,7 @@
         Loading Categories...
     </div>
     <ul ng-show="categories.length > 0">
-        <li ng-repeat="c in categories" ng-click="open(c.id)" ng-class="activeClass(c.id)"><span class="count" ng-show="c.unreadCount">({{c.unreadCount}})</span>{{c.label}}</li>
+        <li ng-repeat="c in categories" ng-click="open(c.id)" ng-class="activeClass(c.id)"><span class="count" ng-show="c.unreadCount"><span ng-show="c.unreadCount < 1000">({{c.unreadCount}})</span><span ng-hide="c.unreadCount < 1000">&infin;</span></span>{{c.label}}</li>
     </ul>
     <div id="nav-footer" ng-controller="GreetingCtrl">
         <p>{{name}} | <a ng-click="clickHelp()">Help</a> | <a href="#/logout">Logout</a>
