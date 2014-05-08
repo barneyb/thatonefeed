@@ -236,10 +236,10 @@ angular.module("ThatOneFeed.controllers")
                     $scope.item.type
                 else if ! $scope.items?
                     'loading'
-                else if $scope.index > 0
-                    'end'
-                else
+                else if $scope.index < 0
                     'start'
+                else
+                    'end'
             ) + ".html"
     ])
 .controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", "markers", ($routeParams, $window, $scope, entries, ripper, markers) ->
@@ -330,14 +330,14 @@ angular.module("ThatOneFeed.controllers")
                     $scope.item.type
                 else if $scope.items.length == 0
                     'loading'
+                else if $scope.index < 0
+                    'start'
                 else if inFlight
                     showOnLoad = true
                     $scope.index--
                     'in_flight'
-                else if $scope.index > 0
-                    'end'
                 else
-                    'start'
+                    'end'
             ) + ".html"
             if $scope.item && $scope.item.unread
                 ((it) ->
