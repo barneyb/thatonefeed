@@ -191,6 +191,57 @@ coreItemCtrl = ($window, $scope, sync) ->
         sync()
 
 angular.module("ThatOneFeed.controllers")
+.controller("FlattenCtrl", ["$routeParams", "$window", "$scope", "httpProxy", "entryRipper", ($routeParams, $window, $scope, httpProxy, ripper) ->
+        $scope.index = -1
+        $scope.items = null
+        $scope.item = null
+        showOnLoad = true
+        sync = ->
+            $scope.item = (if $scope.items? and $scope.index >= 0 and $scope.index < $scope.items.length then $scope.items[$scope.index] else null)
+            if ! $scope.items?
+                addIt = (item) ->
+                    if item
+                        if ! $scope.items?
+                            $scope.items = []
+                        $scope.items.push item
+                        item.caption = ''
+                        if showOnLoad
+                            $scope.next()
+                            showOnLoad = false
+                httpProxy($routeParams.url).then ((data) ->
+                    # emulate a entry structure from the raw body
+                    ripper(
+                        id: data.url
+                        content:
+                            content: data.body
+                        published: new Date().valueOf()
+                        origin:
+                            title: ''
+                        title: $routeParams.title or 'Gallery'
+                        canonical:
+                            [href: data.url]
+                    ).then(addIt
+                        , (err) ->
+                            console.log "error ripping content", err
+                        , addIt
+                    )
+                ), (data) ->
+                    console.log "error loading content", data
+
+        coreItemCtrl($window, $scope, sync)
+
+        $scope.$watch "item", ->
+            $scope.templateUrl = "partials/_entry_" + (
+                if $scope.item
+                    $scope.item.type
+                else if ! $scope.items?
+                    'loading'
+                else if $scope.index > 0
+                    'end'
+                else
+                    'start'
+            ) + ".html"
+    ])
 .controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", "markers", ($routeParams, $window, $scope, entries, ripper, markers) ->
         $scope.streamId = $routeParams.streamId
 
