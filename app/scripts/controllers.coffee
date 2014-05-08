@@ -139,18 +139,74 @@ angular.module("ThatOneFeed.controllers", [])
             else
                 $scope.templateUrl = "partials/_entry_select_category.html"
     ])
+coreItemCtrl = ($window, $scope, sync) ->
+
+        $scope.hasNext = ->
+            $scope.index < $scope.items.length
+
+        $scope.next = ->
+            if $scope.hasNext()
+                $scope.index += 1
+                sync()
+
+        $scope.hasPrevious = ->
+            $scope.index >= 0
+
+        $scope.previous = ->
+            if $scope.hasPrevious()
+                $scope.index -= 1
+                sync()
+
+        $scope.$on "$destroy", $scope.$on "key", (e, ke) ->
+            switch ke.keyCode
+                # for j, k, and space, the SHIFT key reverses behaviour
+                when 32 # SPACE
+                    $scope[(if ke.shiftKey then "previous" else "next")]()
+                    ke.stopImmediatePropagation()
+                    ke.stopPropagation()
+                    ke.preventDefault()
+                when 75, 106 # K, j
+                    $scope.next()
+                when 74, 107 # J ,k
+                    $scope.previous()
+                when 83, 115 # S, s
+                    $scope.toggleSaved()
+                when 65, 97, 90, 122 # A, a, Z, z
+                    $scope.zoom = ! $scope.zoom;
+                    $scope.$broadcast('rescale');
+
+        $scope.$watch "item", ->
+            $window.scrollTo 0, 0
+            $scope.$broadcast('unscale');
+            $scope.zoom = true;
+
+        $scope.$on "$destroy", $scope.$on "click-left", (e, ce) ->
+            $scope.$apply ->
+                $scope.previous()
+
+        $scope.$on "$destroy", $scope.$on "click-right", (e, ce) ->
+            $scope.$apply ->
+                $scope.next()
+
+        sync()
+
+angular.module("ThatOneFeed.controllers")
 .controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", "markers", ($routeParams, $window, $scope, entries, ripper, markers) ->
-        index = -1
+        $scope.streamId = $routeParams.streamId
+
+        $scope.index = -1
+        $scope.items = []
+        $scope.item = null
         continuation = `undefined`
         showOnLoad = true
         inFlight = false
         sync = ->
-            $scope.item = (if index >= 0 and index < $scope.items.length then $scope.items[index] else null)
+            $scope.item = (if $scope.index >= 0 and $scope.index < $scope.items.length then $scope.items[$scope.index] else null)
             # keep 200 items max, but retain at least 100 - 25 = 75 previous items
-            if index > 100 and $scope.items.length > 200
+            if $scope.index > 100 and $scope.items.length > 200
                 $scope.items.splice 0, 25
-                index -= 25
-            if index > $scope.items.length - 8 and continuation isnt null
+                $scope.index -= 25
+            if $scope.index > $scope.items.length - 8 and continuation isnt null
                 inFlight = true
                 entries($scope.streamId, continuation).then ((data) ->
                     if data.id is $scope.streamId and (continuation is `undefined` or continuation isnt data.continuation)
@@ -172,16 +228,7 @@ angular.module("ThatOneFeed.controllers", [])
                 ), (data) ->
                     console.log "error loading entries", data
 
-        $scope.streamId = $routeParams.streamId
-        $scope.items = []
-        $scope.item = null
-        $scope.hasNext = ->
-            index < $scope.items.length
-
-        $scope.next = ->
-            if $scope.hasNext()
-                index += 1
-                sync()
+        coreItemCtrl($window, $scope, sync)
 
         $scope.nextEntry = ->
             if $scope.item and $scope.item.id
@@ -192,14 +239,6 @@ angular.module("ThatOneFeed.controllers", [])
                     break
             else
                 $scope.next()
-
-        $scope.hasPrevious = ->
-            index >= 0
-
-        $scope.previous = ->
-            if $scope.hasPrevious()
-                index -= 1
-                sync()
 
         $scope.previousEntry = ->
             if $scope.item and $scope.item.id
@@ -229,38 +268,12 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.$on "$destroy", $scope.$on "key", (e, ke) ->
             switch ke.keyCode
-                # for j, k space, and d, the SHIFT key reverses behaviour
-                when 32 # SPACE
-                    $scope[(if ke.shiftKey then "previous" else "next")]()
-                    ke.stopImmediatePropagation()
-                    ke.stopPropagation()
-                    ke.preventDefault()
-                when 75, 106 # K, j
-                    $scope.next()
-                when 74, 107 # J ,k
-                    $scope.previous()
-                when 83, 115 # S, s
-                    $scope.toggleSaved();
                 when 68 # D
                     $scope.previousEntry()
                 when 100 # d
                     $scope.nextEntry()
-                when 65, 97, 90, 122 # A, a, Z, z
-                    $scope.zoom = ! $scope.zoom;
-                    $scope.$broadcast('rescale');
-
-        $scope.$on "$destroy", $scope.$on "click-left", (e, ce) ->
-            $scope.$apply ->
-                $scope.previous()
-
-        $scope.$on "$destroy", $scope.$on "click-right", (e, ce) ->
-            $scope.$apply ->
-                $scope.next()
 
         $scope.$watch "item", ->
-            $window.scrollTo 0, 0
-            $scope.$broadcast('unscale');
-            $scope.zoom = true;
             $scope.templateUrl = "partials/_entry_" + (
                 if $scope.item
                     $scope.item.type
@@ -268,8 +281,9 @@ angular.module("ThatOneFeed.controllers", [])
                     'loading'
                 else if inFlight
                     showOnLoad = true
+                    $scope.index--
                     'in_flight'
-                else if index > 0
+                else if $scope.index > 0
                     'end'
                 else
                     'start'
@@ -284,6 +298,4 @@ angular.module("ThatOneFeed.controllers", [])
 
         $scope.$on "$destroy", ->
             $scope.streamId = null
-
-        sync()
     ])
