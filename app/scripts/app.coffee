@@ -7,6 +7,11 @@ angular.module("ThatOneFeed", [
         "ThatOneFeed.directives",
         "ThatOneFeed.controllers"
     ])
+.factory("config", ["$window", ($window) ->
+        config = $window.ThatOneFeed
+        () ->
+            config
+    ])
 .config(["$routeProvider", ($router) ->
         $router.when "/",
             templateUrl: "partials/splash.html"

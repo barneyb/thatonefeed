@@ -11,11 +11,6 @@ angular.module("ThatOneFeed.resources", [])
             )
             d.promise
     ])
-.factory("config", ["$window", ($window) ->
-        config = $window.ThatOneFeed
-        () ->
-            config
-    ])
 .factory("dataUrl", ["config", (config) ->
         c = config()
         (base, params) ->
