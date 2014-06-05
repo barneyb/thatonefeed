@@ -329,10 +329,10 @@ angular.module("ThatOneFeed.controllers")
                 when 100 # d
                     $scope.nextEntry()
 
-        $scope.$watch "item", ->
+        $scope.$watch "item", (item) ->
             $scope.templateUrl = "partials/_entry_" + (
-                if $scope.item
-                    $scope.item.type
+                if item
+                    item.type
                 else if $scope.items.length == 0
                     'loading'
                 else if $scope.index < 0
@@ -344,12 +344,15 @@ angular.module("ThatOneFeed.controllers")
                 else
                     'end'
             ) + ".html"
-            if $scope.item && $scope.item.unread
+            if item?.unread
                 ((it) ->
-                    # todo track view
+                    $scope.$emit 'ga.page', entry_source: it.origin ? '-unknown-'
                     markers.read(it.id)
                         .then ->
                             it.unread = false
                             $scope.$broadcast("item-read", it)
-                )($scope.item)
+                    for i in $scope.items
+                        if it.id == i.id
+                            i.unread = false
+                )(item)
     ])
