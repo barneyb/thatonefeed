@@ -39,3 +39,7 @@ angular.module("ThatOneFeed", [
         $router.otherwise
             redirectTo: "/"
     ])
+.run(['$window', '$location', '$rootScope', ($window, $location, $rootScope) ->
+        $rootScope.$on '$routeChangeSuccess', ->
+            $window.ga 'send', 'pageview', $location.path()
+    ])
