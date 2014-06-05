@@ -47,7 +47,6 @@ angular.module("ThatOneFeed", [
 .run(['$window', '$location', '$rootScope', ($window, $location, $rootScope) ->
         $rootScope.pageTitle = 'That One Feed'
         $rootScope.$on 'page.title', (e, title) ->
-            console.log 'title', title
             $rootScope.pageTitle = if title? then "1Feed : #{title}" else 'That One Feed'
 
         $rootScope.$on 'ga.page', (e, data) ->
