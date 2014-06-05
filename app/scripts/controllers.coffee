@@ -64,11 +64,11 @@ angular.module("ThatOneFeed.controllers", [])
             if $scope.categories? && $scope.categories.length == 0
                 $scope.categories = cats
 
-        $scope.streamId = $routeParams.streamId
+        $scope.streamId = $routeParams.type + '/' + $routeParams.name
         $scope.categories = null
         $scope.open = (id) ->
             $scope.streamId = id
-            $location.path "/view/" + encodeURIComponent(id)
+            $location.path "/view/" + id
 
         $scope.activeClass = (id) ->
             (if $scope.streamId is id then "active" else null)
@@ -139,6 +139,10 @@ angular.module("ThatOneFeed.controllers", [])
             else
                 $scope.templateUrl = "partials/_entry_select_category.html"
     ])
+.controller("ViewCtrl", ["$routeParams", "$scope", "profile", ($params, $scope, profile) ->
+        profile.get().then (p) ->
+            $scope.streamId = ['user', p.id, $params.type, $params.name].join('/')
+    ])
 coreItemCtrl = ($window, $scope, sync) ->
 
         $scope.hasNext = ->
@@ -188,8 +192,6 @@ coreItemCtrl = ($window, $scope, sync) ->
             $scope.$apply ->
                 $scope.next()
 
-        sync()
-
 angular.module("ThatOneFeed.controllers")
 .controller("FlattenCtrl", ["$routeParams", "$window", "$scope", "httpProxy", "entryRipper", ($routeParams, $window, $scope, httpProxy, ripper) ->
         $scope.index = -1
@@ -229,6 +231,7 @@ angular.module("ThatOneFeed.controllers")
                     console.log "error loading content", data
 
         coreItemCtrl($window, $scope, sync)
+        sync()
 
         $scope.$watch "item", ->
             $scope.templateUrl = "partials/_entry_" + (
@@ -242,9 +245,7 @@ angular.module("ThatOneFeed.controllers")
                     'end'
             ) + ".html"
     ])
-.controller("StreamCtrl", ["$routeParams", "$window", "$scope", "entries", "entryRipper", "markers", ($routeParams, $window, $scope, entries, ripper, markers) ->
-        $scope.streamId = $routeParams.streamId
-
+.controller("StreamCtrl", ["$window", "$scope", "entries", "entryRipper", "markers", ($window, $scope, entries, ripper, markers) ->
         $scope.index = -1
         $scope.items = []
         $scope.item = null
@@ -280,6 +281,8 @@ angular.module("ThatOneFeed.controllers")
                     console.log "error loading entries", data
 
         coreItemCtrl($window, $scope, sync)
+        $scope.$watch 'streamId', (id) ->
+            sync() if id?
 
         $scope.nextEntry = ->
             if $scope.item and $scope.item.id

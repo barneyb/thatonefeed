@@ -21,12 +21,12 @@ angular.module("ThatOneFeed", [
             controller: "SplashCtrl"
 
         $router.when "/view",
-            templateUrl: "partials/stream.html"
+            templateUrl: "partials/pick-view.html"
             controller: "PickViewCtrl"
 
-        $router.when "/view/:streamId",
-            templateUrl: "partials/stream.html"
-            controller: "StreamCtrl"
+        $router.when "/view/:type/:name",
+            templateUrl: "partials/view.html"
+            controller: "ViewCtrl"
 
         $router.when "/flatten/:title?/:url",
             templateUrl: "partials/stream.html"
@@ -40,6 +40,7 @@ angular.module("ThatOneFeed", [
             redirectTo: "/"
     ])
 .run(['$window', '$location', '$rootScope', ($window, $location, $rootScope) ->
-        $rootScope.$on '$routeChangeSuccess', ->
-            $window.ga 'send', 'pageview', $location.path()
+        if $window.ga?
+            $rootScope.$on '$routeChangeSuccess', ->
+                $window.ga 'send', 'pageview', $location.path()
     ])

@@ -68,8 +68,9 @@ angular.module("ThatOneFeed.resources", [])
 
             # apply counts
             counts.unreadcounts.forEach (urc) ->
+                id = urc.id.split('/')[2..3].join('/')
                 cats.forEach (it) ->
-                    it.unreadCount = urc.count    if it.id is urc.id
+                    it.unreadCount = urc.count    if it.id is id
 
             deferred.resolve cats
         load = (forceRefresh) ->
@@ -83,7 +84,9 @@ angular.module("ThatOneFeed.resources", [])
             else
                 $http.get(dataUrl("categories"))
                 .success (data) ->
-                    cats = data
+                    cats = for d in data
+                        d.id = d.id.split('/')[2..3].join('/')
+                        d
                     process(deferred, counts)
 
             $http.get(dataUrl("counts"))
