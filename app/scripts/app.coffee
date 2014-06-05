@@ -45,7 +45,15 @@ angular.module("ThatOneFeed", [
             redirectTo: "/"
     ])
 .run(['$window', '$location', '$rootScope', ($window, $location, $rootScope) ->
-        if $window.ga?
-            $rootScope.$on '$routeChangeSuccess', ->
-                $window.ga 'send', 'pageview', $location.path()
+        $rootScope.$on 'ga.page', (data) ->
+            if $window.ga?
+                if ! data?
+                    data = {}
+                if ! data.page
+                    data.page = $location.path()
+                $window.ga 'send', 'pageview', data
+    ])
+.run(['$rootScope', ($rootScope) ->
+        $rootScope.$on '$routeChangeSuccess', ->
+            $rootScope.$emit('ga.page')
     ])
