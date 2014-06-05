@@ -45,12 +45,15 @@ angular.module("ThatOneFeed", [
             redirectTo: "/"
     ])
 .run(['$window', '$location', '$rootScope', ($window, $location, $rootScope) ->
-        $rootScope.$on 'ga.page', (data) ->
+        $rootScope.$on 'ga.page', (e, data) ->
             if $window.ga?
                 if ! data?
                     data = {}
-                if ! data.page
+                if ! data.page?
                     data.page = $location.path()
+                if data.entry_source?
+                    data.dimension2 = data.entry_source
+                    delete data.entry_source
                 $window.ga 'send', 'pageview', data
     ])
 .run(['$rootScope', ($rootScope) ->
