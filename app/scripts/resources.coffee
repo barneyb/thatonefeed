@@ -110,12 +110,6 @@ angular.module("ThatOneFeed.resources", [])
                 continuation: continuation
             )))
     ])
-.factory("httpProxy", ["$http", "wrapHttp", "dataUrl", ($http, wrapHttp, dataUrl) ->
-        (url) ->
-            wrapHttp($http.get(dataUrl("proxy",
-                url: url
-            )))
-    ])
 .factory("markers", ["$http", "wrapHttp", "syncPromise", "syncFail", "dataUrl", ($http, wrap, sync, syncFail, dataUrl) ->
         tags = []
         globalSavedTagId = null
