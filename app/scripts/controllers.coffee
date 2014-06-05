@@ -352,7 +352,4 @@ angular.module("ThatOneFeed.controllers")
                             it.unread = false
                             $scope.$broadcast("item-read", it)
                 )($scope.item)
-
-        $scope.$on "$destroy", ->
-            $scope.streamId = null
     ])
