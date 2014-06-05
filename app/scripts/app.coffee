@@ -45,6 +45,11 @@ angular.module("ThatOneFeed", [
             redirectTo: "/"
     ])
 .run(['$window', '$location', '$rootScope', ($window, $location, $rootScope) ->
+        $rootScope.pageTitle = 'That One Feed'
+        $rootScope.$on 'page.title', (e, title) ->
+            console.log 'title', title
+            $rootScope.pageTitle = if title? then "1Feed : #{title}" else 'That One Feed'
+
         $rootScope.$on 'ga.page', (e, data) ->
             if $window.ga?
                 if ! data?
@@ -55,8 +60,7 @@ angular.module("ThatOneFeed", [
                     data.dimension2 = data.entry_source
                     delete data.entry_source
                 $window.ga 'send', 'pageview', data
-    ])
-.run(['$rootScope', ($rootScope) ->
+
         $rootScope.$on '$routeChangeSuccess', ->
             $rootScope.$emit('ga.page')
     ])

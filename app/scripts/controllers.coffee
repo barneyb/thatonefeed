@@ -142,6 +142,7 @@ angular.module("ThatOneFeed.controllers", [])
 .controller("ViewCtrl", ["$routeParams", "$scope", "profile", ($params, $scope, profile) ->
         profile.get().then (p) ->
             $scope.streamId = ['user', p.id, $params.type, $params.name].join('/')
+            $scope.$emit('page.title', $params.name)
     ])
 coreItemCtrl = ($window, $scope, sync) ->
 
