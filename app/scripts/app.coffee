@@ -22,7 +22,7 @@ angular.module("ThatOneFeed", [
 
         $router.when "/view",
             templateUrl: "partials/stream.html"
-            controller: "ViewerCtrl"
+            controller: "PickViewCtrl"
 
         $router.when "/view/:streamId",
             templateUrl: "partials/stream.html"

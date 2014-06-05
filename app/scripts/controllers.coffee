@@ -130,7 +130,7 @@ angular.module("ThatOneFeed.controllers", [])
                 prefs.set(p)
 
     ])
-.controller("ViewerCtrl", ["$scope", "categories", ($scope, cats) ->
+.controller("PickViewCtrl", ["$scope", "categories", ($scope, cats) ->
         cats.get().then (data) ->
             if data.length == 0
                 $scope.templateUrl = "partials/_entry_no_categories.html"
@@ -308,10 +308,12 @@ angular.module("ThatOneFeed.controllers")
             if $scope.item
                 ((it) ->
                     if it.saved
+                        # todo track unsave
                         markers.unsave(it.id)
                             .then ->
                                 it.saved = false
                     else
+                        # todo track save
                         markers.save(it.id)
                             .then ->
                                 it.saved = true
@@ -341,6 +343,7 @@ angular.module("ThatOneFeed.controllers")
             ) + ".html"
             if $scope.item && $scope.item.unread
                 ((it) ->
+                    # todo track view
                     markers.read(it.id)
                         .then ->
                             it.unread = false
