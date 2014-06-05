@@ -35,8 +35,8 @@ angular.module("ThatOneFeed.directives", [])
                     $element.width("auto").height("auto")
                 $element.removeClass("loading")
 
-            angular.element($window).bind "resize", rescale
-
+            $element.on "$destroy", ->
+                $element.unbind "load", rescale
             $element.bind "load", rescale
 
             $scope.$on "$destroy", $scope.$on "unscale", ->
@@ -46,6 +46,7 @@ angular.module("ThatOneFeed.directives", [])
 
             $scope.$on "$destroy", ->
                 angular.element($window).unbind "resize", rescale
+            angular.element($window).bind "resize", rescale
         ]
     ])
 .directive("scaledImageContainer", [ ->
@@ -72,6 +73,8 @@ angular.module("ThatOneFeed.directives", [])
 
             $timeout ->
                 es = $element.find("img, iframe")
+                es.on "$destroy", ->
+                    es.unbind "load", rescale
                 es.bind "load", rescale
                 for e in es
                     rescale.call(e)
@@ -80,7 +83,7 @@ angular.module("ThatOneFeed.directives", [])
 .directive("oauthTrigger", [ ->
         restrict: "A",
         controller: ["$window", "$element", ($window, $element) ->
-            $element.bind "click", (e) ->
+            handler = (e) ->
                 width = 500
                 height = 700
                 left = ($window.innerWidth - width) / 2
@@ -90,24 +93,33 @@ angular.module("ThatOneFeed.directives", [])
                 e.stopPropagation()
                 e.preventDefault()
                 false
+            $element.on "$destroy", ->
+                $element.unbind "click", handler
+            $element.bind "click", handler
         ]
     ])
 .directive("sideClick", [ ->
         restrict: "A",
         controller: ["$element", "$scope", ($element, $scope) ->
-            $element.bind "click", (e) ->
+            handler = (e) ->
                 pos = e.offsetX / $element.width()
                 if pos <= 0.25
                     $scope.$emit "click-left", e
                 else if pos >= 0.75
                     $scope.$emit "click-right", e
+            $element.on "$destroy", ->
+                $element.unbind "click", handler
+            $element.bind "click", handler
         ]
     ])
 .directive("touchClass", [ ->
         restrict: "A",
         controller: ["$element", "$scope", ($element, $scope) ->
-            $element.bind "click", (e) ->
+            addClass = (e) ->
                 $element.addClass("touch")
+            $element.on "$destroy", ->
+                $element.unbind "click", addClass
+            $element.bind "click", addClass
 
             $scope.$on "$destroy", $scope.$on "click", ->
                 $element.removeClass("touch")
