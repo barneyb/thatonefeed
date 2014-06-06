@@ -281,6 +281,7 @@ angular.module("ThatOneFeed.controllers")
         $scope.$watch "item", (item) ->
             $scope.templateUrl = "partials/_entry_" + (
                 if item
+                    $scope.$emit 'ga.page', entry_source: it.origin ? '-unknown-'
                     item.type
                 else if $scope.items.length == 0
                     'loading'
@@ -295,7 +296,6 @@ angular.module("ThatOneFeed.controllers")
             ) + ".html"
             if item?.unread
                 ((it) ->
-                    $scope.$emit 'ga.page', entry_source: it.origin ? '-unknown-'
                     markers.read(it.id)
                         .then ->
                             it.unread = false
