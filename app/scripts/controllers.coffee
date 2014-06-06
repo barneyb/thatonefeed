@@ -281,7 +281,7 @@ angular.module("ThatOneFeed.controllers")
         $scope.$watch "item", (item) ->
             $scope.templateUrl = "partials/_entry_" + (
                 if item
-                    $scope.$emit 'ga.page', entry_source: it.origin ? '-unknown-'
+                    $scope.$emit 'ga.page', entry_source: item.origin ? '-unknown-'
                     item.type
                 else if $scope.items.length == 0
                     'loading'
