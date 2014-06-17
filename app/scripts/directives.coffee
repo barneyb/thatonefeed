@@ -51,7 +51,7 @@ angular.module("ThatOneFeed.directives", [])
     ])
 .directive("scaledImageContainer", [ ->
         restrict: "A",
-        controller: ['$timeout', '$element', ($timeout, $element) ->
+        controller: ['$timeout', '$scope', '$element', ($timeout, $scope, $element) ->
             rescale = ->
                 nw = @naturalWidth
                 nh = @naturalHeight
@@ -71,13 +71,18 @@ angular.module("ThatOneFeed.directives", [])
                 factor = Math.min(3, Math.min(pw / w, ph / h))
                 e.addClass("show").width(Math.floor(w * factor) + "px").height(Math.floor(h * factor) + "px")
 
-            $timeout ->
+            handler = ->
                 es = $element.find("img, iframe")
                 es.on "$destroy", ->
                     es.unbind "load", rescale
                 es.bind "load", rescale
                 for e in es
                     rescale.call(e)
+
+            $scope.$watch 'item', (it) ->
+                if it != null
+                    $timeout handler
+
         ]
     ])
 .directive("oauthTrigger", [ ->
