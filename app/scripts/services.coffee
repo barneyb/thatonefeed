@@ -75,19 +75,22 @@ angular.module("ThatOneFeed.services", [])
             d.unread = it.unread
             d
 
-        hiresRE = /^(.*tumblr\.com.*_)[1-9][0-9]{2}(\.(jp(?:e?)g|png))$/
-
         ###
         I accept an 'item' element and if it's an image attempt to find a
         higher resolution version to use instead.
         ###
         hires = (d) ->
             if d.type is "image"
-                m = hiresRE.exec(d.img)
+                m = /^(.*tumblr\.com.*_)[1-9][0-9]{2}(\.(jp(?:e?)g|png))$/.exec(d.img)
                 if m
                     promiseImage(m[1] + "1280" + m[2]).then (img) ->
                         d.img = img.src
-
+                    return d
+                m = /^(.*files.wordpress.com.*\.(jp(?:e?)g|png))\?.*(w|h)=[0-9].*$/.exec(d.img)
+                console.log(m)
+                if m
+                    d.img = m[1]
+                    return d
             d
 
         (it) ->
