@@ -35,9 +35,6 @@ angular.module("ThatOneFeed.services", [])
         altRE = /\salt="([^"]+)"/
         titleRE = /\stitle="([^"]+)"/
         rip = (block) ->
-            return block unless ripperRE.test(block) # has images
-            text = block.replace(/<\/?[a-z][^>]*>/g, "").replace(/\s+/g, " ")
-            return block if text.length > 1000 # treat as textual
             imgs = []
             caption = ""
             loop
@@ -99,7 +96,14 @@ angular.module("ThatOneFeed.services", [])
             # this should actually rip stuff, and notify per item.  resolve can hand out an item OR null.
             setTimeout (->
                 block = (it.content or it.summary).content
-                r = rip(block)
+                r = block # assume text
+                if block.replace(/<\/?[a-z][^>]*>/gi, "").replace(/\s+/g, " ").length <= 1000
+                    if ripperRE.test(block)
+                        r = rip(block) # has images, and not to much text, so rip
+                    else if typeof r is "string" && it.visual?.contentType?.indexOf("image/") == 0
+                        # make it a single-item image array
+                        r = [src: it.visual.url, caption: $sce.trustAsHtml(r)]
+
                 asText = (body) ->
                     deferred.resolve core(it,
                         type: "html"
