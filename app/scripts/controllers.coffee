@@ -61,8 +61,6 @@ angular.module("ThatOneFeed.controllers", [])
                 0
             $scope.categories = cats.filter (it) ->
                 it.id == $scope.streamId || (it.unreadCount? && it.unreadCount > 0)
-            if $scope.categories? && $scope.categories.length == 0
-                $scope.categories = cats
 
         $scope.streamId = $routeParams.type + '/' + $routeParams.name
         $scope.categories = null
