@@ -110,7 +110,7 @@ angular.module("ThatOneFeed.resources", [])
                 continuation: continuation
             )))
     ])
-.factory("markers", ["$http", "wrapHttp", "syncPromise", "syncFail", "dataUrl", ($http, wrap, sync, syncFail, dataUrl) ->
+.factory("markers", ["$http", "$sce", "wrapHttp", "syncPromise", "syncFail", "dataUrl", ($http, $sce, wrap, sync, syncFail, dataUrl) ->
         tags = []
         globalSavedTagId = null
         lastReadId = null
@@ -129,13 +129,23 @@ angular.module("ThatOneFeed.resources", [])
             )
         )()
 
-        save: (id) ->
+        save: (id, it) ->
             return syncFail(null) unless globalSavedTagId?
-            wrap($http.put(dataUrl("tag"),
-                tagId: globalSavedTagId
-                entryId: id
-            ))
-        unsave: (id) ->
+            payload = {
+                tagId: globalSavedTagId,
+                entryId: id,
+                type: it.type,
+                published: it.published.valueOf(),
+                title: it.title?.replace(/\s+/g, ' '),
+                link: it.link
+            }
+            if it.type == 'image'
+                payload.image = it.img
+                payload.content = $sce.getTrustedHtml(it.caption)
+            else
+                payload.content = $sce.getTrustedHtml(it.content)
+            wrap($http.put(dataUrl("save"), payload))
+        unsave: (id, it) ->
             return syncFail(null) unless globalSavedTagId?
             wrap($http.delete(dataUrl("tag",
                 tagId: globalSavedTagId

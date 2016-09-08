@@ -4,6 +4,7 @@ tagId: globalSavedTagId
 entryId: id
 --->
 <cfif cgi.request_method EQ "PUT">
+    <!--- this shouldn't be used, call 'save' instead --->
     <cfset data = deserializeJson(getHttpRequestData().content) />
     <cfhttp method="PUT" url="#request.api.root#/v3/tags/#urlEncodedFormat(data.tagId)#" throwonerror="true">
         <cfhttpparam type="header" name="Authorization" value="OAuth #request.getAccessToken()#" />

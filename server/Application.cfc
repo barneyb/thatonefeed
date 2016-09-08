@@ -3,6 +3,7 @@
     <cfset this.name = "ThatOneFeed" />
     <cfset this.sessionManagement = false />
     <cfset this.applicationTimeout = createTimespan(5, 0, 0, 0) />
+    <cfset this.datasource = "thatonefeed" />
 
     <cfset request.cookieName = this.name />
 

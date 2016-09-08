@@ -259,12 +259,12 @@ angular.module("ThatOneFeed.controllers")
                 ((it) ->
                     if it.saved
                         # todo track unsave
-                        markers.unsave(it.id)
+                        markers.unsave(it.id, it)
                             .then ->
                                 it.saved = false
                     else
                         # todo track save
-                        markers.save(it.id)
+                        markers.save(it.id, it)
                             .then ->
                                 it.saved = true
                 )($scope.item)
