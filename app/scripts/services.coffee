@@ -84,7 +84,6 @@ angular.module("ThatOneFeed.services", [])
                         d.img = img.src
                     return d
                 m = /^(.*files.wordpress.com.*\.(jp(?:e?)g|png))\?.*(w|h)=[0-9].*$/.exec(d.img)
-                console.log(m)
                 if m
                     d.img = m[1]
                     return d
