@@ -64,7 +64,8 @@ angular.module("ThatOneFeed.services", [])
 
         core = (it, d) ->
             d.id = it.id
-            d.age = moment(it.published).fromNow(true)
+            d.published = moment(it.published)
+            d.age = d.published.fromNow(true)
             d.origin = it.origin.title
             d.title = it.title.replace(/&nbsp;/g, ' ')
             d.link = (it.canonical or it.alternate)[0].href
