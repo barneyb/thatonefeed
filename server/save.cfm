@@ -24,7 +24,7 @@ create table item (
     constraint uk_entry_image unique key (entry_id, image_url)
 );
 alter table item
-    add processed smallint default 0;
+    add processed_ts datetime;
 --->
 <cfset data = deserializeJson(getHttpRequestData().content) />
 <cfhttp method="PUT" url="#request.api.root#/v3/tags/#urlEncodedFormat(data.tagId)#" throwonerror="true">
