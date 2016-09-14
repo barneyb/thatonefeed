@@ -23,6 +23,8 @@ create table item (
     constraint pk_item primary key (id),
     constraint uk_entry_image unique key (entry_id, image_url)
 );
+alter table item
+    add processed smallint default 0;
 --->
 <cfset data = deserializeJson(getHttpRequestData().content) />
 <cfhttp method="PUT" url="#request.api.root#/v3/tags/#urlEncodedFormat(data.tagId)#" throwonerror="true">
