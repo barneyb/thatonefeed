@@ -14,7 +14,7 @@
             request.feedly = structKeyExists(cookie, request.cookieName) && isJson(cookie[request.cookieName]) ? deserializeJson(cookie[request.cookieName]) : {};
             if (request.isProduction) {
                 request.api = {
-                    root = "http://cloud.feedly.com",
+                    root = "https://cloud.feedly.com",
                     clientId = "thatonefeed",
                     clientSecret = "FE01FDTIPTQZABQRXE1LWIN06YKH",
                     redirectUri = "http://thatonefeed.com"
