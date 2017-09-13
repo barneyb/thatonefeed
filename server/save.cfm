@@ -45,7 +45,7 @@ alter table item
     values
         (now(),
          <cfqueryparam cfsqltype="cf_sql_varchar" value="#data.entryId#" />,
-         from_unixtime(<cfqueryparam cfsqltype="cf_sql_bigint" value="#data.published#" /> / 1000), <!--- it's passed as millis --->
+         from_unixtime(<cfqueryparam cfsqltype="cf_sql_bigint" value="#data.published / 1000#" />), <!--- it's passed as millis --->
          <cfqueryparam cfsqltype="cf_sql_varchar" value="#data.type#" />,
          <cfqueryparam cfsqltype="cf_sql_varchar" value="#data.title#" />,
          <cfqueryparam cfsqltype="cf_sql_varchar" value="#data.link#" />,
