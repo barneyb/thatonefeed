@@ -95,7 +95,7 @@ angular.module("ThatOneFeed.services", [])
 
             # this should actually rip stuff, and notify per item.  resolve can hand out an item OR null.
             setTimeout (->
-                block = (it.content or it.summary).content
+                block = (it.content or it.summary)?.content or ''
                 r = block # assume text
                 if block.replace(/<\/?[a-z][^>]*>/gi, "").replace(/\s+/g, " ").length <= 1000
                     if ripperRE.test(block)
