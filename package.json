@@ -10,6 +10,7 @@
         "karma-ng-scenario": "~0.1"
     },
     "scripts": {
+        "watch": "grunt client",
         "package": "grunt package",
         "deploy": "grunt deploy"
     },
