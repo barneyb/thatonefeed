@@ -1,5 +1,6 @@
 angular.module("ThatOneFeed.controllers", [])
 .controller("SplashCtrl", ["$scope", "$location", "profile", "dataUrl", "qs", ($scope, $location, profile, dataUrl, qs) ->
+        $scope.$emit('page.title')
         $scope.authUrl = dataUrl("auth")
         profile.get().then ->
             $location.path "/view"
@@ -46,6 +47,7 @@ angular.module("ThatOneFeed.controllers", [])
     ])
 .controller("PageCtrl", ["$routeParams", "$templateCache", "$scope", ($routeParams, $templateCache, $scope) ->
         pageId = $routeParams.pageId
+        $scope.$emit('page.title', pageId)
         partial = "partials/" + pageId + ".html"
         if pageId.indexOf("_") != 0 && $templateCache.get(partial)
             $scope.templateUrl = partial
@@ -91,6 +93,7 @@ angular.module("ThatOneFeed.controllers", [])
             $interval.cancel(countInterval)
     ])
 .controller("GreetingCtrl", ["$scope", "prefs", ($scope, prefs) ->
+        $scope.$emit('page.title')
         escDereg = null
         escHandler = (e, ke) ->
             switch ke.keyCode
@@ -129,6 +132,7 @@ angular.module("ThatOneFeed.controllers", [])
 
     ])
 .controller("PickViewCtrl", ["$scope", "categories", ($scope, cats) ->
+        $scope.$emit('page.title')
         cats.get().then (data) ->
             if data.length == 0
                 $scope.templateUrl = "partials/_entry_no_categories.html"
@@ -137,10 +141,18 @@ angular.module("ThatOneFeed.controllers", [])
             else
                 $scope.templateUrl = "partials/_entry_select_category.html"
     ])
-.controller("ViewCtrl", ["$routeParams", "$scope", "profile", ($params, $scope, profile) ->
+.controller("ViewCtrl", ["$routeParams", "$scope", "categories", "profile", ($params, $scope, cats, profile) ->
         profile.get().then (p) ->
             $scope.streamId = ['user', p.id, $params.type, $params.name].join('/')
-            $scope.$emit('page.title', $params.name)
+            title = $params.name
+            if $params.type == "category"
+                cats.get().then (cs) ->
+                    targetId = "category/#{$params.name}"
+                    for c in cs when c.id == targetId
+                        title = c.label
+                    $scope.$emit('page.title', title)
+            else
+                $scope.$emit('page.title', title)
     ])
 coreItemCtrl = ($window, $scope, sync) ->
 
