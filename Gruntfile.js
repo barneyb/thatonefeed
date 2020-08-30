@@ -56,6 +56,19 @@ module.exports = function (grunt) {
                 }()
             }
         },
+        cacheBust: {
+            index_html: {
+                options: {
+                    assets: [
+                        outdir + '/js/**',
+                        outdir + '/css/**',
+                    ],
+                    deleteOriginals: true,
+                    length: 10,
+                },
+                src: [outdir + '/index.html']
+            }
+        },
         htmlmin: {
             index_html: {
                 options: {
@@ -254,6 +267,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-image-embed');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-cache-bust');
     grunt.loadNpmTasks('grunt-exec');
 
     grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static', 'copy:icons']);
@@ -263,7 +277,7 @@ module.exports = function (grunt) {
         clientTasks.splice(1, 0, "copy:server_config")
     }
     grunt.registerTask('client', clientTasks);
-    grunt.registerTask('package', ['build', 'imageEmbed', 'clean:static', 'copy:server', 'uglify', 'cssmin', 'htmlmin']);
+    grunt.registerTask('package', ['build', 'imageEmbed', 'clean:static', 'copy:server', 'uglify', 'cssmin', 'cacheBust', 'htmlmin']);
     grunt.registerTask('deploy', ['exec:deploy'])
 
 };
