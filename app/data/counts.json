@@ -25,27 +25,32 @@
         "updated": 1385233139565
     },
     {
-        "id": "user/4884d65e-26d9-4355-ac23-facde4fc5908/category/global.all",
+        "id": "user/6fb2385d-ca4b-4700-bd5f-d80097ba1d89/category/global.all",
         "count": 97,
         "updated": 1385233139565
     },
     {
-        "id": "user/4884d65e-26d9-4355-ac23-facde4fc5908/category/photos",
+        "id": "user/6fb2385d-ca4b-4700-bd5f-d80097ba1d89/category/photos",
         "count": 8,
         "updated": 1385160841569
     },
     {
-        "id": "user/4884d65e-26d9-4355-ac23-facde4fc5908/category/etsy",
+        "id": "user/6fb2385d-ca4b-4700-bd5f-d80097ba1d89/category/etsy",
         "count": 26,
         "updated": 1385233139565
     },
     {
-        "id": "user/4884d65e-26d9-4355-ac23-facde4fc5908/category/other",
+        "id": "user/6fb2385d-ca4b-4700-bd5f-d80097ba1d89/category/other",
         "count": 63,
         "updated": 1385148736806
     },
     {
-        "id": "user/4884d65e-26d9-4355-ac23-facde4fc5908/category/global.uncategorized",
+        "id": "user/6fb2385d-ca4b-4700-bd5f-d80097ba1d89/category/galleries",
+        "count": 13,
+        "updated": 1485148736806
+    },
+    {
+        "id": "user/6fb2385d-ca4b-4700-bd5f-d80097ba1d89/category/global.uncategorized",
         "count": 0,
         "updated": 0
     }
