@@ -1,4 +1,9 @@
 <span class="save" ng-click="toggleSaved()" ng-class="saveClass()">save</span>
 <a href="{{item.link}}">{{item.title}}</a>
 <span class="origin">{{item.origin}}</span>
+<span ng-show="item.keywords.length > 0" class="keywords">
+    <span ng-repeat="k in item.keywords">
+        {{k}}
+    </span>
+</span>
 <span class="age">({{item.age}})</span>

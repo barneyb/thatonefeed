@@ -104,10 +104,18 @@ h2 {
     margin-bottom: 5px;
 
     .origin,
-    .age {
+    .age,
+    .keywords {
         font-size: 65%;
         color: #999;
-        margin-left: 10px;
+        margin-left: 1em;
+    }
+
+    .keywords *::after {
+        content: ", ";
+    }
+    .keywords :last-child::after {
+        content: "";
     }
 
     .age {
@@ -142,7 +150,8 @@ h2 {
     &.image {
         > a,
         .origin,
-        .age {
+        .age,
+        .keywords {
             color: #ccc;
         }
     }
@@ -350,7 +359,8 @@ footer.copyright {
             font-size: 80%;
         }
 
-        .age {
+        .age,
+        .keywords {
             display: none;
         }
     }
@@ -395,7 +405,8 @@ footer.copyright {
     }
     h2 {
         .age,
-        .origin {
+        .origin,
+        .keywords {
             color: #666;
         }
     }

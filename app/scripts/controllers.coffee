@@ -304,6 +304,7 @@ angular.module("ThatOneFeed.controllers")
                 else
                     'end'
             ) + ".html"
+#            $scope.json = JSON.stringify(item, null, 3)
             if item?.unread
                 ((it) ->
                     markers.read(it.id)
