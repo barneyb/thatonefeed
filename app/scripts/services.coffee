@@ -71,8 +71,6 @@ angular.module("ThatOneFeed.services", [])
             d.link = (it.canonical or it.alternate)[0].href
             d.saved = it.saved
             d.unread = it.unread
-            if it.author
-                d.origin += " (#{it.author})"
             d.keywords = if it.keywords then it.keywords.filter((it) -> !it.endsWith("staple")) else []
 #            d.raw = it
             d
