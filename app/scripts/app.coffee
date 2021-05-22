@@ -47,9 +47,9 @@ angular.module("ThatOneFeed", [
 
         $rootScope.$on 'ga.page', (e, data) ->
             if $window.ga?
-                if ! data?
+                if !data?
                     data = {}
-                if ! data.page?
+                if !data.page?
                     data.page = $location.path()
                 if data.entry_source?
                     data.dimension2 = data.entry_source

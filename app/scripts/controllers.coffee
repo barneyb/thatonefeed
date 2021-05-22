@@ -184,13 +184,18 @@ coreItemCtrl = ($window, $scope, sync) ->
                 when "S", "s"
                     $scope.toggleSaved()
                 when "A", "a", "Z", "z"
-                    $scope.zoom = ! $scope.zoom;
-                    $scope.$broadcast('rescale');
+                    $scope.zoom = !$scope.zoom
+                    $scope.$broadcast('rescale')
+
+        # Backspace doesn't give a press?
+        $scope.$on "$destroy", $scope.$on "keydown", (e, ke) ->
+            if ke.key == "Backspace"
+                $scope.previous()
 
         $scope.$watch "item", ->
             $window.scrollTo 0, 0
-            $scope.$broadcast('unscale');
-            $scope.zoom = true;
+            $scope.$broadcast('unscale')
+            $scope.zoom = true
 
         $scope.$on "$destroy", $scope.$on "click-left", (e, ce) ->
             $scope.$apply ->
