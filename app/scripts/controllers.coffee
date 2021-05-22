@@ -27,8 +27,7 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.down = (e) ->
             $scope.$broadcast "keydown", e
         $scope.press = (e) ->
-            if e.keyCode == 32
-                # it's a space
+            if e.key == " "
                 if e.shiftKey
                     # trying to scroll up
                     if $element.scrollTop() > 0
@@ -96,9 +95,8 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.$emit('page.title')
         escDereg = null
         escHandler = (e, ke) ->
-            switch ke.keyCode
-                when 27 # ESC
-                    hideHelp()
+            if ke.key == "Escape"
+                hideHelp()
 
         showHelp = ->
             $scope.showHelp = true
@@ -120,9 +118,8 @@ angular.module("ThatOneFeed.controllers", [])
         $scope.clickHelp = toggleHelp
 
         $scope.$on "$destroy", $scope.$on "key", (e, ke) ->
-            switch ke.keyCode
-                when 63 # ?
-                    toggleHelp()
+            if ke.key == "?"
+                toggleHelp()
 
         prefs.get().then (p) ->
             if p.showHelp != "0"
@@ -173,20 +170,20 @@ coreItemCtrl = ($window, $scope, sync) ->
                 sync()
 
         $scope.$on "$destroy", $scope.$on "key", (e, ke) ->
-            switch ke.keyCode
+            switch ke.key
                 # for j, k, and space, the SHIFT key reverses behaviour
-                when 32 # SPACE
+                when " "
                     $scope[(if ke.shiftKey then "previous" else "next")]()
                     ke.stopImmediatePropagation()
                     ke.stopPropagation()
                     ke.preventDefault()
-                when 75, 106 # K, j
+                when "K", "j"
                     $scope.next()
-                when 74, 107 # J ,k
+                when "J", "k"
                     $scope.previous()
-                when 83, 115 # S, s
+                when "S", "s"
                     $scope.toggleSaved()
-                when 65, 97, 90, 122 # A, a, Z, z
+                when "A", "a", "Z", "z"
                     $scope.zoom = ! $scope.zoom;
                     $scope.$broadcast('rescale');
 
@@ -282,10 +279,10 @@ angular.module("ThatOneFeed.controllers")
                 )($scope.item)
 
         $scope.$on "$destroy", $scope.$on "key", (e, ke) ->
-            switch ke.keyCode
-                when 68 # D
+            switch ke.key
+                when "D"
                     $scope.previousEntry()
-                when 100 # d
+                when "d"
                     $scope.nextEntry()
 
         $scope.$watch "item", (item) ->
