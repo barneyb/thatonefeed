@@ -1,60 +1,57 @@
 module.exports = function (grunt) {
 
-    var isServer = grunt.option('server');
-    var outdir = isServer ? '..' : 'public';
+    const isServer = grunt.option('server');
+    const outdir = isServer ? '..' : 'public';
+
+    function inPlaceOutfile(path) {
+        while (path.charAt(0) === "/") {
+            path = path.substr(1);
+        }
+        path = outdir + "/" + path;
+        return {
+            [path]: [path],
+        };
+    }
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         less: {
             compile: {
                 files: {
-                    'app/css/_app_less.css': 'app/styles/*.less'
-                }
-            }
-        },
-        coffee: {
-            compile: {
-                options: {
-                    join: true
+                    'app/css/_app_less.css': 'app/styles/**/*.less',
                 },
-                files: {
-                    'app/js/_app_coffee.js': 'app/scripts/*.coffee'
-                }
-            }
+            },
+        },
+        babel: {
+            options: {
+                sourceMap: false,
+                presets: ['@babel/env'],
+            },
+            src: {
+                files: inPlaceOutfile("js/app.js"),
+            },
         },
         uglify: {
             vendor_js: {
-                files: function() {
-                    var r = {};
-                    r[outdir + '/js/vendor.js'] = [outdir + '/js/vendor.js'];
-                    return r;
-                }()
+                files: inPlaceOutfile("js/vendor.js"),
             },
             app_js: {
-                files: function() {
-                    var r = {};
-                    r[outdir + '/js/app.js'] = [outdir + '/js/app.js'];
-                    return r;
-                }()
-            }
+                files: inPlaceOutfile("js/app.js"),
+            },
         },
         imageEmbed: {
             app_css: {
-                src: [ outdir + '/css/app.css' ],
+                src: [outdir + '/css/app.css'],
                 dest: outdir + '/css/app.css',
                 options: {
-                    deleteAfterEncoding: false
-                }
-            }
+                    deleteAfterEncoding: false,
+                },
+            },
         },
         cssmin: {
             app_css: {
-                files: function() {
-                    var r = {};
-                    r[outdir + '/css/app.css'] = [outdir + '/css/app.css'];
-                    return r;
-                }()
-            }
+                files: inPlaceOutfile("css/app.css"),
+            },
         },
         cacheBust: {
             index_html: {
@@ -66,21 +63,17 @@ module.exports = function (grunt) {
                     deleteOriginals: true,
                     length: 10,
                 },
-                src: [outdir + '/index.html']
-            }
+                src: [outdir + '/index.html'],
+            },
         },
         htmlmin: {
             index_html: {
                 options: {
                     removeComments: true,
-                    collapseWhitespace: true
+                    collapseWhitespace: true,
                 },
-                files: function() {
-                    var r = {};
-                    r[outdir + '/index.html'] = [outdir + '/index.html'];
-                    return r;
-                }()
-            }
+                files: inPlaceOutfile("index.html"),
+            },
         },
         concat: {
             vendor_js: {
@@ -88,22 +81,24 @@ module.exports = function (grunt) {
                     'lib/moment.js',
                     'lib/jquery/jquery.js',
                     'lib/angular/angular.js',
-                    'lib/angular/angular-route.js'
+                    'lib/angular/angular-route.js',
                 ],
-                dest: outdir + '/js/vendor.js'
+                dest: outdir + '/js/vendor.js',
             },
             app_js: {
                 src: [
-                    'app/js/*.js'
+                    'app/scripts/app.js', // entry point has to be first
+                    'app/scripts/**/*.js',
+                    'app/js/*.js',
                 ],
-                dest: outdir + '/js/app.js'
+                dest: outdir + '/js/app.js',
             },
             app_css: {
                 src: [
-                    'app/css/*.css'
+                    'app/css/*.css',
                 ],
-                dest: outdir + '/css/app.css'
-            }
+                dest: outdir + '/css/app.css',
+            },
         },
         copy: {
             static: {
@@ -114,11 +109,11 @@ module.exports = function (grunt) {
                         src: [
                             'data/**/*.*',
                             'images/**/*.*',
-                            'index.html'
+                            'index.html',
                         ],
-                        dest: outdir + '/'
-                    }
-                ]
+                        dest: outdir + '/',
+                    },
+                ],
             },
             icons: {
                 files: [
@@ -126,9 +121,9 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'logo/',
                         src: ['*.*png'],
-                        dest: outdir + '/'
-                    }
-                ]
+                        dest: outdir + '/',
+                    },
+                ],
             },
             server: {
                 files: [
@@ -136,9 +131,9 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: 'server/',
                         src: ['*.*'],
-                        dest: outdir + '/data'
-                    }
-                ]
+                        dest: outdir + '/data',
+                    },
+                ],
             },
             server_config: {
                 files: [
@@ -147,73 +142,68 @@ module.exports = function (grunt) {
                         cwd: 'app/data/',
                         src: ['config.server.js'],
                         dest: outdir + '/data',
-                        rename: function(dest, src) {
+                        rename: function (dest, src) {
                             return dest + "/config.js";
-                        }
-                    }
-                ]
-            }
+                        },
+                    },
+                ],
+            },
         },
         watch: {
             less: {
                 files: [
-                    'app/styles/*.less'
+                    'app/styles/**/*.less',
                 ],
-                tasks: ['less']
-            },
-            coffee: {
-                files: [
-                    'app/scripts/*.coffee'
-                ],
-                tasks: ['coffee']
+                tasks: ['less'],
             },
             vendor_js: {
                 files: [
-                    'lib/**/*.js'
+                    'lib/**/*.js',
                 ],
-                tasks: ['concat:vendor_js']
+                tasks: ['concat:vendor_js'],
             },
             app_js: {
                 files: [
-                    'app/js/*.js'
+                    'app/js/*.js',
+                    'app/scripts/**/*.js',
                 ],
-                tasks: ['concat:app_js']
+                tasks: ['concat:app_js'],
             },
             templates_js: {
                 files: [
-                    'app/partials/*.html'
+                    'app/partials/*.html',
                 ],
-                tasks: ['ngtemplates']
+                tasks: ['ngtemplates'],
             },
             app_css: {
                 files: [
-                    'app/css/*.css'
+                    'app/css/*.css',
                 ],
-                tasks: ['concat:app_css']
+                tasks: ['concat:app_css'],
             },
             static: {
                 files: [
                     'app/data/**/*.*',
                     'app/images/**/*.*',
-                    'app/index.html'
+                    'app/index.html',
                 ],
-                tasks: ['copy:static']
+                tasks: ['copy:static'],
             },
             icons: {
                 files: [
-                    'logo/*.png'
+                    'logo/*.png',
                 ],
-                tasks: ['copy:icons']
-            }
+                tasks: ['copy:icons'],
+            },
         },
         connect: {
             server: {
                 options: {
                     port: 80,
                     base: outdir,
-                    keepalive: true
-                }
-            }
+                    keepalive: true,
+                },
+            },
         },
         ngtemplates: {
             compile: {
@@ -221,13 +211,13 @@ module.exports = function (grunt) {
                     module: 'ThatOneFeed',
                     htmlmin: {
                         removeComments: true,
-                        collapseWhitespace: true
-                    }
+                        collapseWhitespace: true,
+                    },
                 },
                 cwd: 'app',
                 src: 'partials/*.html',
-                dest: 'app/js/_templates.js'
-            }
+                dest: 'app/js/_templates.js',
+            },
         },
         clean: {
             all: [
@@ -239,25 +229,25 @@ module.exports = function (grunt) {
                 outdir + "/js",
                 // internal stuff
                 'target',
-                'app/css/_*',
-                'app/js/_*'
+                'app/css',
+                'app/js',
             ],
             static: [
                 outdir + '/data',
-                outdir + '/images'
-            ]
+                outdir + '/images',
+            ],
         },
         exec: {
             deploy: {
-                cmd: 'rsync --progress --verbose --stats -a --delete-excluded --delete-after public/ barneyb@barneyb.com:/home/www/barneyb.com/thatonefeed/'
-            }
-        }
+                cmd: 'rsync --progress --verbose --stats -a --delete-excluded --delete-after public/ barneyb@barneyb.com:/home/www/barneyb.com/thatonefeed/',
+            },
+        },
     });
 
     // Load the plugin
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-coffee');
+    grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -270,14 +260,20 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-cache-bust');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('build', ['clean:all', 'coffee', 'less', 'ngtemplates', 'concat', 'copy:static', 'copy:icons']);
+    grunt.registerTask(
+        'build',
+        ['clean:all', 'less', 'ngtemplates', 'concat', 'copy:static', 'copy:icons'],
+    );
     grunt.registerTask('default', ['build']);
     var clientTasks = ['build', 'watch'];
     if (isServer) {
         clientTasks.splice(1, 0, "copy:server_config")
     }
     grunt.registerTask('client', clientTasks);
-    grunt.registerTask('package', ['build', 'imageEmbed', 'clean:static', 'copy:server', 'uglify', 'cssmin', 'cacheBust', 'htmlmin']);
+    grunt.registerTask(
+        'package',
+        ['build', 'imageEmbed', 'clean:static', 'copy:server', 'babel', 'uglify', 'cssmin', 'cacheBust', 'htmlmin'],
+    );
     grunt.registerTask('deploy', ['exec:deploy'])
 
 };
