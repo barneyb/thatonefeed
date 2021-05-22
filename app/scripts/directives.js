@@ -9,6 +9,7 @@ angular.module("ThatOneFeed.directives", [])
         ) {
             $scope.name = null;
             $scope.feedlyUrl = null;
+            $scope.year = new Date().getFullYear();
             profile.get().then(
                 p => {
                     $scope.name = p.givenName;
